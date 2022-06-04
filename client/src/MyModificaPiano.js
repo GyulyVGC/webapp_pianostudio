@@ -10,34 +10,7 @@ import MyAlerts from './MyAlerts';
 function MyPianoCourse(props) {
 
     const nightMode = useContext(nightModeContext).nightMode;
-    /*
-        let incompatibili = props.course.incompatibili;
-        let incompatibiliList = '';
-        if (incompatibili !== null) {
-            incompatibiliList =
-                <ul>
-                    {incompatibili.map(incomp => <li key={incomp}> {incomp} {'(' + props.vett.filter(c => c.codice === incomp)[0].nome + ')'}</li>)}
-                </ul>
-        }
     
-        let propedeutico = props.course.propedeutico;
-        let propedeuticoList = '';
-        if (propedeutico !== null) {
-            propedeuticoList =
-                <ul>
-                    {<li> {props.course.propedeutico + ' (' +
-                        props.vett.filter(c => c.codice === props.course.propedeutico)[0].nome + ')'} </li>}
-                </ul>
-        }
-    */
-    /*
-    let updateFav = (fav) => {
-        filmToUpdate.favorite = !fav;
-        setFav(fav => !fav);
-    }
-    */
-    //const navigate = useNavigate();
-
     let retVal = [];
     retVal.push(<tr key="tr1" style={{ height: '50px' }}>
         <td key="td1" style={{ textAlign: 'center' }}>
@@ -171,15 +144,34 @@ function MyModificaPiano(props) {
                         color: nightMode ? '#ff9900' : '#003cb3',
                         backgroundColor: nightMode ? '#212529' : '#FBFBFB',
                         position: 'sticky', top: '40%',
-                        border: 'red',
-                        bottom: '4%'
+                        bottom: '5%'
                     }}>
-                        Devi inserire un numero di crediti compreso tra
+                        Numero crediti concessi: tra
                         {props.user.iscrizione === 'part-time' ? ' 20 ' : ' 60 '} 
                         e 
                         {props.user.iscrizione === 'part-time' ? ' 40 ' : ' 80'}.
-                        <br/><br/>
+                        <br/>
                         Al momento hai inserito {props.crediti} crediti.
+                        <br/>
+                        <span style={{ marginLeft: '3%' }}></span>
+                        <Button className='btn-sm' style={stylish}
+                            onClick={() => {
+                                props.updatePiano(props.pianoProvvisorio);
+                                navigate('/pianostudi');
+                            }}>Salva</Button>
+                        <span style={{ marginLeft: '13%' }}></span>
+                        <Button style={{color: 'black'}} className='btn-sm' variant='danger'
+                            onClick={() => {
+                                props.setCrediti(() => 0);
+                                props.setPianoProvvisorio([]);
+                                props.updatePiano([]);
+                                navigate('/pianostudi');
+                            }}>Elimina piano</Button>
+                        <span style={{ marginLeft: '10%' }}></span>
+                        <Button style={{color: 'black'}} className='btn-sm' variant='secondary'
+                            onClick={() => {
+                                navigate('/pianostudi');
+                            }}>Annulla modifiche</Button>
                     </div>
                 </>
             }

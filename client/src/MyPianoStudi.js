@@ -1,10 +1,40 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Col } from 'react-bootstrap';
+import { Button, Col, Table } from 'react-bootstrap';
 import { useContext } from 'react';
 import nightModeContext from './nightModeContext';
 import { useNavigate } from 'react-router-dom';
 
-function MyIscrizione(props) {
+function MyPianoCourse(props) {
+
+    const nightMode = useContext(nightModeContext).nightMode;
+
+    let retVal = [];
+    retVal.push(<tr key="tr1" style={{ height: '50px' }}>
+        <td key="td1" style={{ textAlign: 'center' }}>
+            {props.course.codice}
+        </td>
+        <td key="td2">
+            {props.course.nome}
+        </td>
+        <td key="td3" style={{ textAlign: 'center' }}>
+            {props.course.crediti}
+        </td>
+    </tr>);
+
+    return (retVal);
+}
+
+
+function AddPianoRows(props) {
+    let pianoTable = [];
+    for (let codice of props.piano) {
+        let course = props.vett.filter(c => c.codice === codice)[0];
+        pianoTable.push(<MyPianoCourse key={codice} course={course} />);
+    }
+    return pianoTable;
+}
+
+function MyPianoStudi(props) {
     const nightMode = useContext(nightModeContext).nightMode;
     const navigate = useNavigate();
 
@@ -27,33 +57,56 @@ function MyIscrizione(props) {
             <br />
             <h2>Piano di studi</h2>
             <br />
-            <div style={{
-                position: 'fixed',
-                right: '1%',
-                left: '76%'
-            }}>
-                <hr />
-                <br />
-                <h5>
-                    {props.piano.length === 0 ?
-                        <>
-                            <span style={{ marginLeft: '7%' }} />
-                            Il tuo piano di studi è vuoto.
-                            <br/><br/>
-                            <span style={{ marginLeft: '27%' }} />
-                            <Button style={stylish} onClick={() => {
-                                navigate('/pianoStudi/modifica');
-                            }} >Aggiungi corsi</Button>
-                        </>
-                        :
-                        'piano pieno'
-                    }
-                </h5>
-                <br />
-                <hr />
-            </div>
+            <br />
+            {props.piano.length === 0 ?
+
+                <div style={{
+                    position: 'fixed',
+                    right: '1%',
+                    left: '76%'
+                }}>
+                    <hr />
+                    <h5>
+                        <span style={{ marginLeft: '7%' }} />
+                        Il tuo piano di studi è vuoto.
+                        <br /><br />
+                        <span style={{ marginLeft: '27%' }} />
+                        <Button style={stylish} onClick={() => {
+                            navigate('/pianostudi/modifica');
+                        }} >Aggiungi corsi</Button>
+                    </h5>
+                    <hr />
+                </div>
+                :
+                <>
+                    <Table hover variant={nightMode ? "dark" : "light"} >
+                        <tbody >
+                            <tr style={{
+                                color: nightMode ? '#ff9900' : '#003cb3',
+                                position: 'sticky', top: '11%'
+                            }}>
+                                <th style={{ textAlign: 'center' }}>Codice</th>
+                                <th>Nome</th>
+                                <th style={{ textAlign: 'center' }}>Crediti</th>
+                            </tr>
+                            <AddPianoRows piano={props.piano} vett={props.courses} />
+                        </tbody>
+                    </Table>
+                    <div style={{
+                        backgroundColor: nightMode ? '#212529' : '#FBFBFB',
+                        position: 'sticky', bottom: '5%'
+                    }}>
+                        <span style={{ marginLeft: '70%' }}></span>
+                        <Button style={stylish} className='btn-sm' variant='secondary'
+                            onClick={() => {
+                                navigate('/pianostudi/modifica');
+                            }}>Modifica</Button>
+                    </div>
+                </>
+            }
+            <br />
         </Col>
     )
 }
 
-export default MyIscrizione;
+export default MyPianoStudi;

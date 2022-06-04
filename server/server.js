@@ -99,6 +99,13 @@ app.get('/courses/:codice',
     }
   });
 
+// GET /pianostudi
+app.get('/pianostudi', isLoggedIn, (req, res) => {
+  dao.listPiano(req.user.id)
+    .then(courses => setTimeout(() => res.status(200).json(courses), 500)) //setto timeout per simulare latenza server
+    .catch(() => res.status(500).end());
+});
+
 // PUT /pianostudi
 app.put('/pianostudi', isLoggedIn, async (req, res) => {
   if (req.body.corsi !== null && Array.isArray(req.body.corsi) === false) {
@@ -112,22 +119,21 @@ app.put('/pianostudi', isLoggedIn, async (req, res) => {
     res.status(500).json();
   }
 });
-
-// DELETE /films/:id
-app.delete('/films/:id', isLoggedIn, async (req, res) => {
-  if (isNaN(req.params.id)) {
-    return res.status(422).json();
+/*
+// PUT /corsi/iscritti
+app.put('/corsi/iscritti', isLoggedIn, async (req, res) => {
+  if (req.body.corsi !== null && Array.isArray(req.body.corsi) === false) {
+    return res.status(422).json({ error: 'formato corsi errato' });
   }
+
   try {
-    const film = await dao.getFilmById(req.params.id, req.user.id);
-    if (Object.entries(film).length === 0)
-      return res.status(404).json();
-    await dao.deleteFilm(req.params.id, req.user.id);
-    res.status(204).end();
+    await dao.setPiano(req.body.corsi, req.user.id);
+    res.status(201).end();
   } catch (err) {
-    res.status(503).json({ error: `Database error during the deletion of exam ${req.params.code}.` });
+    res.status(500).json();
   }
 });
+*/
 
 
 /*** Users APIs ***/

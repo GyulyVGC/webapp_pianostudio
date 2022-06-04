@@ -2,6 +2,7 @@ const dayjs = require("dayjs");
 const URL = 'http://localhost:3001'
 
 async function getCourses() {
+  // call: GET /courses
   const response = await fetch(URL + '/courses', { credentials: 'include' }); //togliere????
   const coursesJson = await response.json();
   if (response.ok) {
@@ -42,6 +43,19 @@ function addFilm(f) {
     }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
   });
 }
+
+async function getPiano() {
+  // call: GET /pianostudi
+  const response = await fetch(URL + '/pianostudi', { credentials: 'include' });
+  const coursesJson = await response.json();
+  if (response.ok) {
+    return coursesJson;
+  }
+  else {
+    throw coursesJson;  // mi aspetto che sia un oggetto json fornito dal server che contiene l'errore
+  }
+}
+
 
 function updatePiano(corsi) {
   // call: PUT /pianostudi
@@ -147,5 +161,5 @@ async function getUserInfo() {
 }
 
 
-const API = { getCourses, storeUpdatedIscrizione, updatePiano, deleteFilm, logIn, logOut, getUserInfo };
+const API = { getCourses, storeUpdatedIscrizione, updatePiano, getPiano, logIn, logOut, getUserInfo };
 export default API;

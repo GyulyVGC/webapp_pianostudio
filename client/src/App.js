@@ -64,9 +64,10 @@ function App() {
       .catch(err => handleError(err));
   }
 
-  const updatePiano = () => {
-    setPiano(pianoProvvisorio);
-    API.updatePiano(pianoProvvisorio)
+  const updatePiano = (piano) => {
+    piano.map(c => `"${c}"`);
+    setPiano(() => piano);
+    API.updatePiano(piano)
       .then(setDirty(true))
       .catch(err => handleError(err));
   }
@@ -76,6 +77,18 @@ function App() {
       API.getCourses()
         .then((courses) => {
           setCourses(courses);
+          setDirty(false);
+        })
+        .catch(err => handleError(err));
+    }
+  }, [dirty]);
+
+  useEffect(() => {
+    if (dirty && loggedIn) {
+      API.getPiano()
+        .then((courses) => {
+          setPiano(courses);
+          setPianoProvvisorio(courses);
           setDirty(false);
         })
         .catch(err => handleError(err));
@@ -140,9 +153,10 @@ function App() {
         setLoggedIn(true);
         setUser(user);
         setMessageLogin('');
+        setDirty(true);
         user.iscrizione === null ?
           navigate('/iscrizione') :
-          navigate('/pianoStudi');
+          navigate('/pianostudi');
       })
       .catch(err => {
         setMessageLogin(err);
@@ -182,7 +196,7 @@ function App() {
     <>
       <MyTable dirty={dirty} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         crediti={crediti} setCrediti={setCrediti}/>
-      <MyPianoStudi user={user} piano={piano} />
+      <MyPianoStudi user={user} piano={piano} courses={courses}/>
     </>
 
   const editPage =
@@ -209,13 +223,13 @@ function App() {
           <Route path='/login' element={loggedIn ?
             (user.iscrizione === null ?
               <Navigate to='/iscrizione' /> :
-              <Navigate to='/pianoStudi' />
+              <Navigate to='/pianostudi' />
             ) :
             homePageNoAuth} />
 
-          <Route path='/pianoStudi' element={loggedIn ? homePageAuthIscritto : <Navigate to='/login' />} />
+          <Route path='/pianostudi' element={loggedIn ? homePageAuthIscritto : <Navigate to='/login' />} />
 
-          <Route path='/pianoStudi/modifica' element={loggedIn ? editPage : <Navigate to='/login' />} />
+          <Route path='/pianostudi/modifica' element={loggedIn ? editPage : <Navigate to='/login' />} />
 
           {/*
           <Route path='/films' element={loggedIn ? myAppBody : <Navigate to='/login' />} />

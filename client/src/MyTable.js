@@ -170,7 +170,7 @@ function MyTable(props) {
     const nightMode = useContext(nightModeContext).nightMode;
 
     const location = useLocation();
-    let editPage = location.pathname === '/pianoStudi/modifica';
+    let editPage = location.pathname === '/pianostudi/modifica';
     let [errorMessage, setErrorMessage] = useState('');
 
     let retVal = [];

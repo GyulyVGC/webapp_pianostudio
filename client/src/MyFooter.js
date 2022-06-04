@@ -6,8 +6,8 @@ function MyFooter() {
     const nightMode = useContext(nightModeContext).nightMode;
 
     let stylish = nightMode ?
-        { background: "linear-gradient(to right,#FF4E50,#F9D423)" } :
-        { background: "linear-gradient(to right,#076585,#fff)" };
+        { background: "linear-gradient(to right,#FF4E50,#F9D423)", height: '5%' } :
+        { background: "linear-gradient(to right,#076585,#fff)", height: '5%' };
     return (
         <footer className={"fixed-bottom mt-auto text-dark"}
             style={stylish}>
