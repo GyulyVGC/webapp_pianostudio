@@ -39,6 +39,10 @@ function MyCourse(props) {
             statusComponent =
                 <h5><FiPlus style={{ cursor: 'pointer' }}
                     onClick={() => {
+                        props.setVett(oldVett => 
+                            oldVett.map(c => c.codice === props.course.codice ?
+                                {...c, iscritti: c.iscritti + 1} :
+                                c));
                         props.setPianoProvvisorio(oldPP => oldPP.concat(props.course.codice));
                         props.setCreditiProvvisori(oldCrediti => oldCrediti + props.course.crediti);
                     }} /></h5>;
@@ -156,7 +160,8 @@ function AddRows(props) {
     let courseTable = [];
     for (let course of props.vett) {
         let status = getCourseStatus(props.pianoProvvisorio, course);
-        courseTable.push(<MyCourse editPage={props.editPage} key={course.codice} vett={props.vett}
+        courseTable.push(<MyCourse editPage={props.editPage} key={course.codice} 
+            vett={props.vett} setVett={props.setVett}
             course={course} pianoProvvisorio={props.pianoProvvisorio}
             creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
             setPianoProvvisorio={props.setPianoProvvisorio} status={status}
@@ -199,8 +204,8 @@ function MyTable(props) {
                             <th style={{ textAlign: 'center' }}>Aggiungi</th> :
                             ''}
                     </tr>
-                    <AddRows editPage={editPage} vett={props.courses} pianoProvvisorio={props.pianoProvvisorio}
-                        setPianoProvvisorio={props.setPianoProvvisorio}
+                    <AddRows editPage={editPage} vett={props.courses} setVett={props.setCourses}
+                        pianoProvvisorio={props.pianoProvvisorio} setPianoProvvisorio={props.setPianoProvvisorio}
                         creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
                         errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
                 </tbody>

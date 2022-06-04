@@ -41,7 +41,7 @@ function App() {
 
   const [loadCorsiInit, setLoadCorsiInit] = useState(true);
   //const [loadPianoInit, setLoadPianoInit] = useState(true);
-  const [loadPiano, setLoadPiano] = useState(true);
+  const [loadPiano, setLoadPiano] = useState(false);
   const navigate = useNavigate();
 
   const [loggedIn, setLoggedIn] = useState(false);  // no user is logged in when app loads
@@ -183,32 +183,36 @@ function App() {
 
   const homePageNoAuth =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+        courses={courses} setCourses={setCourses}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyLoginForm errorMessage={messageLogin} setErrorMessage={setMessageLogin} login={doLogIn}/>
     </>
 
   const homePageAuthNoIscritto =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+        courses={courses} setCourses={setCourses}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyIscrizione user={user} updateIscrizione={updateIscrizione}/>
     </>
 
   const homePageAuthIscritto =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+        courses={courses} setCourses={setCourses}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyPianoStudi user={user} piano={piano} courses={courses} loadPiano={loadPiano}/>
     </>
 
   const editPage =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+        courses={courses} setCourses={setCourses}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyModificaPiano pianoIniziale={piano} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         creditiIniziali={crediti} creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}
-        courses={courses} updatePiano={updatePiano} user={user}/>
+        courses={courses} setCourses={setCourses} updatePiano={updatePiano} user={user}/>
     </>
 
   return (
