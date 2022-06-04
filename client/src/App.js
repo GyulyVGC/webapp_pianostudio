@@ -34,13 +34,14 @@ function App() {
 
   let [courses, setCourses] = useState([]);
   let [piano, setPiano] = useState([]);
-  let [pianoProvvisorio, setPianoProvvisorio] = useState([]);
+  let [pianoProvvisorio, setPianoProvvisorio] = useState([]); 
   const [nightMode, setNightMode] = useState(true);
   let updateNightMode = () => setNightMode(nightMode => !nightMode);
   let nightModeObject = { nightMode: nightMode, updateNightMode: updateNightMode };
 
-  //const [initialLoading, setInitialLoading] = useState(true);
-  const [dirty, setDirty] = useState(true);
+  const [loadCorsiInit, setLoadCorsiInit] = useState(true);
+  //const [loadPianoInit, setLoadPianoInit] = useState(true);
+  const [loadPiano, setLoadPiano] = useState(true);
   const navigate = useNavigate();
 
   const [loggedIn, setLoggedIn] = useState(false);  // no user is logged in when app loads
@@ -64,36 +65,36 @@ function App() {
       .catch(err => handleError(err));
   }
 
-  const updatePiano = (piano) => {
-    piano.map(c => `"${c}"`);
-    setPiano(() => piano);
-    API.updatePiano(piano)
-      .then(setDirty(true))
+  const updatePiano = (piano, crediti) => {
+    setPiano(piano);
+    API.updatePiano(piano.map(c => '"'+c+'"'), crediti)
+      .then(setLoadPiano(true))
       .catch(err => handleError(err));
   }
 
   useEffect(() => {
-    if (dirty) {
+    if (loadCorsiInit) {
       API.getCourses()
         .then((courses) => {
           setCourses(courses);
-          setDirty(false);
+          setLoadCorsiInit(false);
         })
         .catch(err => handleError(err));
     }
-  }, [dirty]);
+  }, [loadCorsiInit]);
 
   useEffect(() => {
-    if (dirty && loggedIn) {
+    if (loadPiano) {
       API.getPiano()
-        .then((courses) => {
-          setPiano(courses);
-          setPianoProvvisorio(courses);
-          setDirty(false);
+        .then((piano) => {
+          setPiano(piano.corsi);
+          setPianoProvvisorio(piano.corsi);
+          setCrediti(piano.crediti);
+          setLoadPiano(false);
         })
         .catch(err => handleError(err));
     }
-  }, [dirty]);
+  }, [loadPiano]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -153,7 +154,7 @@ function App() {
         setLoggedIn(true);
         setUser(user);
         setMessageLogin('');
-        setDirty(true);
+        setLoadPiano(true);
         user.iscrizione === null ?
           navigate('/iscrizione') :
           navigate('/pianostudi');
@@ -180,30 +181,30 @@ function App() {
 
   const homePageNoAuth =
     <>
-      <MyTable dirty={dirty} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         crediti={crediti} setCrediti={setCrediti}/>
       <MyLoginForm errorMessage={messageLogin} setErrorMessage={setMessageLogin} login={doLogIn}/>
     </>
 
   const homePageAuthNoIscritto =
     <>
-      <MyTable dirty={dirty} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         crediti={crediti} setCrediti={setCrediti}/>
       <MyIscrizione user={user} updateIscrizione={updateIscrizione}/>
     </>
 
   const homePageAuthIscritto =
     <>
-      <MyTable dirty={dirty} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         crediti={crediti} setCrediti={setCrediti}/>
-      <MyPianoStudi user={user} piano={piano} courses={courses}/>
+      <MyPianoStudi user={user} piano={piano} courses={courses} loadPiano={loadPiano}/>
     </>
 
   const editPage =
     <>
-      <MyTable dirty={dirty} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         crediti={crediti} setCrediti={setCrediti}/>
-      <MyModificaPiano user={user} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyModificaPiano user={user} pianoIniziale={pianoProvvisorio} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         crediti={crediti} setCrediti={setCrediti} courses={courses} updatePiano={updatePiano}/>
     </>
 

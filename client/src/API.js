@@ -21,43 +21,20 @@ async function getCourses() {
   }
 }
 
-function addFilm(f) {
-  // call: POST /films
-  return new Promise((resolve, reject) => {
-    fetch(URL + '/films', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ title: f.title, favorite: f.favorite ? 1 : 0, watchdate: f.date ? dayjs(f.date).format('YYYY-MM-DD') : f.date, rating: f.rating }),
-    }).then((response) => {
-      if (response.ok) {
-        resolve(null);
-      } else {
-        // analyze the cause of error
-        response.json()
-          .then((message) => { reject(message); }) // error message in the response body
-          .catch(() => { reject({ error: "Cannot parse server response." }) }); // something else
-      }
-    }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
-  });
-}
-
 async function getPiano() {
   // call: GET /pianostudi
   const response = await fetch(URL + '/pianostudi', { credentials: 'include' });
-  const coursesJson = await response.json();
+  const pianoJson = await response.json();
   if (response.ok) {
-    return coursesJson;
+    return pianoJson; //ha i corsi del piano e i rispettivi crediti
   }
   else {
-    throw coursesJson;  // mi aspetto che sia un oggetto json fornito dal server che contiene l'errore
+    throw pianoJson;  // mi aspetto che sia un oggetto json fornito dal server che contiene l'errore
   }
 }
 
 
-function updatePiano(corsi) {
+function updatePiano(corsi, crediti) {
   // call: PUT /pianostudi
   return new Promise((resolve, reject) => {
     fetch(URL + '/pianostudi', {
@@ -66,7 +43,7 @@ function updatePiano(corsi) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ corsi: corsi})
+      body: JSON.stringify({ corsi: corsi, crediti: crediti})
     }).then((response) => {
       if (response.ok) {
         resolve(null);

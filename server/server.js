@@ -78,7 +78,7 @@ app.use(passport.session());
 // GET /courses
 app.get('/courses', (req, res) => { //anche per i non loggedIn
   dao.listCourses()
-    .then(courses => setTimeout(() => res.status(200).json(courses), 500)) //setto timeout per simulare latenza server
+    .then(courses => setTimeout(() => res.status(200).json(courses), 1500)) //setto timeout per simulare latenza server
     .catch(() => res.status(500).end());
 });
 
@@ -102,7 +102,9 @@ app.get('/courses/:codice',
 // GET /pianostudi
 app.get('/pianostudi', isLoggedIn, (req, res) => {
   dao.listPiano(req.user.id)
-    .then(courses => setTimeout(() => res.status(200).json(courses), 500)) //setto timeout per simulare latenza server
+    .then(piano => {
+      setTimeout(() => res.status(200).json(piano), 1500); 
+    }) //setto timeout per simulare latenza server
     .catch(() => res.status(500).end());
 });
 
@@ -113,7 +115,7 @@ app.put('/pianostudi', isLoggedIn, async (req, res) => {
   }
 
   try {
-    await dao.setPiano(req.body.corsi, req.user.id);
+    await dao.setPiano(req.body.corsi, req.body.crediti, req.user.id);
     res.status(201).end();
   } catch (err) {
     res.status(500).json();

@@ -68,27 +68,30 @@ exports.insertFilm = (title, favorite, watchdate, rating, userID) => {
     });
 };
 
-// tutti i corsi nel piano dello studente loggato
+// tutti i corsi del piano dello user loggato
 exports.listPiano = (userID) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM ISCRIZIONE WHERE IDUSER=?';
-        db.all(sql, [userID], (err, row) => {
+        db.all(sql, [userID], (err, rows) => {
             if (err) {
                 reject(err);
                 return;
             }
-            const courses = row.CORSI;
-            resolve(courses);
+            const piano = rows.map((c) => ({
+                corsi: JSON.parse(c.CORSI),
+                crediti: c.CREDITI
+            }));
+            resolve(piano[0]);
         });
     });
 };
 
 
 // update piano di studi
-exports.setPiano = (corsi, userID) => {
+exports.setPiano = (corsi, crediti, userID) => {
     return new Promise((resolve, reject) => {
-        const sql = 'UPDATE ISCRIZIONE SET CORSI=? WHERE IDUSER = ?';
-        db.run(sql, [corsi === null ? null : '['+corsi+']', userID], function (err) {
+        const sql = 'UPDATE ISCRIZIONE SET CORSI=?, CREDITI=? WHERE IDUSER = ?';
+        db.run(sql, [corsi === null ? null : '['+corsi+']', crediti, userID], function (err) {
             if (err) {
                 reject(err);
                 return;

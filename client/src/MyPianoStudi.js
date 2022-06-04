@@ -3,6 +3,7 @@ import { Button, Col, Table } from 'react-bootstrap';
 import { useContext } from 'react';
 import nightModeContext from './nightModeContext';
 import { useNavigate } from 'react-router-dom';
+import { BsClockHistory } from 'react-icons/bs';
 
 function MyPianoCourse(props) {
 
@@ -57,28 +58,31 @@ function MyPianoStudi(props) {
             <br />
             <h2>Piano di studi</h2>
             <br />
-            <br />
             {props.piano.length === 0 ?
-
-                <div style={{
-                    position: 'fixed',
-                    right: '1%',
-                    left: '76%'
-                }}>
-                    <hr />
-                    <h5>
-                        <span style={{ marginLeft: '7%' }} />
-                        Il tuo piano di studi è vuoto.
-                        <br /><br />
-                        <span style={{ marginLeft: '27%' }} />
-                        <Button style={stylish} onClick={() => {
-                            navigate('/pianostudi/modifica');
-                        }} >Aggiungi corsi</Button>
-                    </h5>
-                    <hr />
-                </div>
+                <>
+                    {props.loadPiano ? <h4>Sincronizzo... <BsClockHistory/></h4> : false}
+                    <br />
+                    <div style={{
+                        position: 'fixed',
+                        right: '1%',
+                        left: '76%'
+                    }}>
+                        <hr />
+                        <h5>
+                            <span style={{ marginLeft: '7%' }} />
+                            Il tuo piano di studi è vuoto.
+                            <br /><br />
+                            <span style={{ marginLeft: '27%' }} />
+                            <Button style={stylish} onClick={() => {
+                                navigate('/pianostudi/modifica');
+                            }} >Aggiungi corsi</Button>
+                        </h5>
+                        <hr />
+                    </div>
+                </>
                 :
                 <>
+                    {props.loadPiano ? <h4>Sincronizzo... <BsClockHistory/></h4> : false}
                     <Table hover variant={nightMode ? "dark" : "light"} >
                         <tbody >
                             <tr style={{

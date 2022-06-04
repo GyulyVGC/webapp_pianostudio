@@ -181,8 +181,8 @@ function MyTable(props) {
                 setMessage={setErrorMessage}></MyAlerts> :
             false}
         <br />
-        {props.dirty ?
-            <><h2>Waiting for server response...</h2></> :
+        {props.loadCorsiInit ?
+            <><h2>Ricevo i corsi dal server...</h2></> :
             <Table hover variant={nightMode ? "dark" : "light"}>
                 <tbody >
                     <tr style={{

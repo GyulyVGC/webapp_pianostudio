@@ -98,8 +98,8 @@ function MyModificaPiano(props) {
             <br />
             <h2>Piano di studi</h2>
             {errorMessage ?
-                <MyAlerts type='info' message={errorMessage} position='11%'
-                    setMessage={setErrorMessage}></MyAlerts> :
+                <MyAlerts type={errorMessage.includes('crediti') ? 'error':'info'}
+                 message={errorMessage} position='11%' setMessage={setErrorMessage}></MyAlerts> :
                 false}
             {props.pianoProvvisorio.length === 0 ?
                 <>
@@ -156,20 +156,37 @@ function MyModificaPiano(props) {
                         <span style={{ marginLeft: '3%' }}></span>
                         <Button className='btn-sm' style={stylish}
                             onClick={() => {
-                                props.updatePiano(props.pianoProvvisorio);
-                                navigate('/pianostudi');
+                                if(props.user.iscrizione === 'part-time'){
+                                    if(props.crediti >= 20 && props.crediti <= 40){
+                                        props.updatePiano(props.pianoProvvisorio, props.crediti);
+                                        navigate('/pianostudi');
+                                    }
+                                    else{
+                                        setErrorMessage(() => 'Devi inserire tra 20 e 40 crediti.');
+                                    }
+                                }
+                                if(props.user.iscrizione === 'full-time'){
+                                    if(props.crediti >= 60 && props.crediti <= 80){
+                                        props.updatePiano(props.pianoProvvisorio, props.crediti);
+                                        navigate('/pianostudi');
+                                    }
+                                    else{
+                                        setErrorMessage(() => 'Devi inserire tra 60 e 80 crediti.');
+                                    }
+                                }
                             }}>Salva</Button>
                         <span style={{ marginLeft: '13%' }}></span>
                         <Button style={{color: 'black'}} className='btn-sm' variant='danger'
                             onClick={() => {
                                 props.setCrediti(() => 0);
                                 props.setPianoProvvisorio([]);
-                                props.updatePiano([]);
+                                props.updatePiano([], 0);
                                 navigate('/pianostudi');
                             }}>Elimina piano</Button>
                         <span style={{ marginLeft: '10%' }}></span>
                         <Button style={{color: 'black'}} className='btn-sm' variant='secondary'
                             onClick={() => {
+                                props.setPianoProvvisorio(props.pianoIniziale);
                                 navigate('/pianostudi');
                             }}>Annulla modifiche</Button>
                     </div>
