@@ -41,7 +41,7 @@ function App() {
 
   const [loadCorsiInit, setLoadCorsiInit] = useState(true);
   //const [loadPianoInit, setLoadPianoInit] = useState(true);
-  const [loadPiano, setLoadPiano] = useState(false);
+  const [loadPiano, setLoadPiano] = useState(true);
   const navigate = useNavigate();
 
   const [loggedIn, setLoggedIn] = useState(false);  // no user is logged in when app loads
@@ -156,6 +156,7 @@ function App() {
         setLoggedIn(true);
         setUser(user);
         setMessageLogin('');
+        setLoadPiano(false);
         setLoadPiano(true);
         user.iscrizione === null ?
           navigate('/iscrizione') :
