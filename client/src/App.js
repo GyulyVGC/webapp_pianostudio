@@ -50,6 +50,7 @@ function App() {
   const [messageLogin, setMessageLogin] = useState('');
 
   let [crediti, setCrediti] = useState(0);
+  let [creditiProvvisori, setCreditiProvvisori] = useState(0);
 
   function handleError(err) {
     console.log(err);
@@ -90,6 +91,7 @@ function App() {
           setPiano(piano.corsi);
           setPianoProvvisorio(piano.corsi);
           setCrediti(piano.crediti);
+          setCreditiProvvisori(piano.crediti);
           setLoadPiano(false);
         })
         .catch(err => handleError(err));
@@ -182,30 +184,31 @@ function App() {
   const homePageNoAuth =
     <>
       <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
-        crediti={crediti} setCrediti={setCrediti}/>
+        creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyLoginForm errorMessage={messageLogin} setErrorMessage={setMessageLogin} login={doLogIn}/>
     </>
 
   const homePageAuthNoIscritto =
     <>
       <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
-        crediti={crediti} setCrediti={setCrediti}/>
+        creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyIscrizione user={user} updateIscrizione={updateIscrizione}/>
     </>
 
   const homePageAuthIscritto =
     <>
       <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
-        crediti={crediti} setCrediti={setCrediti}/>
+        creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyPianoStudi user={user} piano={piano} courses={courses} loadPiano={loadPiano}/>
     </>
 
   const editPage =
     <>
       <MyTable loadCorsiInit={loadCorsiInit} courses={courses} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
-        crediti={crediti} setCrediti={setCrediti}/>
-      <MyModificaPiano user={user} pianoIniziale={pianoProvvisorio} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
-        crediti={crediti} setCrediti={setCrediti} courses={courses} updatePiano={updatePiano}/>
+        creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
+      <MyModificaPiano pianoIniziale={piano} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+        creditiIniziali={crediti} creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}
+        courses={courses} updatePiano={updatePiano} user={user}/>
     </>
 
   return (

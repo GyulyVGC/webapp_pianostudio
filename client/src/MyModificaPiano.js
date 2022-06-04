@@ -40,7 +40,7 @@ function MyPianoCourse(props) {
                 <h5><FiMinus style={{ cursor: 'pointer' }}
                     onClick={() => {
                         props.setPianoProvvisorio(oldPP => oldPP.filter(c => c !== props.course.codice));
-                        props.setCrediti(oldCrediti => oldCrediti - props.course.crediti);
+                        props.setCreditiProvvisori(oldCrediti => oldCrediti - props.course.crediti);
                     }} /></h5>}
         </td>
     </tr>);
@@ -68,7 +68,8 @@ function AddPianoRows(props) {
         let status = getPianoCourseStatus(props.vett, props.pianoProvvisorio, course);
         pianoTable.push(<MyPianoCourse key={codice} status={status}
             course={course} setPianoProvvisorio={props.setPianoProvvisorio} vett={props.vett}
-            pianoProvvisorio={props.pianoProvvisorio} crediti={props.crediti} setCrediti={props.setCrediti} 
+            pianoProvvisorio={props.pianoProvvisorio} 
+            setCreditiProvvisori={props.setCreditiProvvisori} creditiProvvisori={props.creditiProvvisori} 
             errorMessage={props.errorMessage} setErrorMessage={props.setErrorMessage} />);
     }
     return pianoTable;
@@ -135,7 +136,7 @@ function MyModificaPiano(props) {
                                 <th style={{ textAlign: 'center' }}>Rimuovi</th>
                             </tr>
                             <AddPianoRows pianoProvvisorio={props.pianoProvvisorio}
-                                crediti={props.crediti} setCrediti={props.setCrediti}
+                                creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
                                 vett={props.courses} setPianoProvvisorio={props.setPianoProvvisorio}
                                 errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
                         </tbody>
@@ -151,14 +152,14 @@ function MyModificaPiano(props) {
                         e 
                         {props.user.iscrizione === 'part-time' ? ' 40 ' : ' 80'}.
                         <br/>
-                        Al momento hai inserito {props.crediti} crediti.
+                        Al momento hai inserito {props.creditiProvvisori} crediti.
                         <br/>
                         <span style={{ marginLeft: '3%' }}></span>
                         <Button className='btn-sm' style={stylish}
                             onClick={() => {
                                 if(props.user.iscrizione === 'part-time'){
-                                    if(props.crediti >= 20 && props.crediti <= 40){
-                                        props.updatePiano(props.pianoProvvisorio, props.crediti);
+                                    if(props.creditiProvvisori >= 20 && props.creditiProvvisori <= 40){
+                                        props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
                                         navigate('/pianostudi');
                                     }
                                     else{
@@ -166,8 +167,8 @@ function MyModificaPiano(props) {
                                     }
                                 }
                                 if(props.user.iscrizione === 'full-time'){
-                                    if(props.crediti >= 60 && props.crediti <= 80){
-                                        props.updatePiano(props.pianoProvvisorio, props.crediti);
+                                    if(props.creditiProvvisori >= 60 && props.creditiProvvisori <= 80){
+                                        props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
                                         navigate('/pianostudi');
                                     }
                                     else{
@@ -178,7 +179,7 @@ function MyModificaPiano(props) {
                         <span style={{ marginLeft: '13%' }}></span>
                         <Button style={{color: 'black'}} className='btn-sm' variant='danger'
                             onClick={() => {
-                                props.setCrediti(() => 0);
+                                props.setCreditiProvvisori(() => 0);
                                 props.setPianoProvvisorio([]);
                                 props.updatePiano([], 0);
                                 navigate('/pianostudi');
@@ -186,7 +187,8 @@ function MyModificaPiano(props) {
                         <span style={{ marginLeft: '10%' }}></span>
                         <Button style={{color: 'black'}} className='btn-sm' variant='secondary'
                             onClick={() => {
-                                props.setPianoProvvisorio(props.pianoIniziale);
+                                props.setPianoProvvisorio(() => props.pianoIniziale);
+                                props.setCreditiProvvisori(()=>props.creditiIniziali);
                                 navigate('/pianostudi');
                             }}>Annulla modifiche</Button>
                     </div>

@@ -40,7 +40,7 @@ function MyCourse(props) {
                 <h5><FiPlus style={{ cursor: 'pointer' }}
                     onClick={() => {
                         props.setPianoProvvisorio(oldPP => oldPP.concat(props.course.codice));
-                        props.setCrediti(oldCrediti => oldCrediti + props.course.crediti);
+                        props.setCreditiProvvisori(oldCrediti => oldCrediti + props.course.crediti);
                     }} /></h5>;
             break;
         case 'alreadyInserted':
@@ -158,7 +158,7 @@ function AddRows(props) {
         let status = getCourseStatus(props.pianoProvvisorio, course);
         courseTable.push(<MyCourse editPage={props.editPage} key={course.codice} vett={props.vett}
             course={course} pianoProvvisorio={props.pianoProvvisorio}
-            crediti={props.crediti} setCrediti={props.setCrediti}
+            creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
             setPianoProvvisorio={props.setPianoProvvisorio} status={status}
             errorMessage={props.errorMessage} setErrorMessage={props.setErrorMessage} />);
     }
@@ -201,7 +201,7 @@ function MyTable(props) {
                     </tr>
                     <AddRows editPage={editPage} vett={props.courses} pianoProvvisorio={props.pianoProvvisorio}
                         setPianoProvvisorio={props.setPianoProvvisorio}
-                        crediti={props.crediti} setCrediti={props.setCrediti}
+                        creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
                         errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
                 </tbody>
             </Table>
