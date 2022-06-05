@@ -1,11 +1,12 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Navbar, Nav, Form, NavDropdown } from "react-bootstrap";
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 import { ImBooks } from 'react-icons/im';
 import { FaUserCheck, FaUserSlash } from 'react-icons/fa';
 import { BsSun, BsSunFill, BsMoonStarsFill, BsMoonStars } from 'react-icons/bs';
 import { useContext } from 'react';
 import nightModeContext from './nightModeContext';
 import { useNavigate } from 'react-router-dom';
+import Switch from '@mui/material/Switch';
 
 function MyNavbar(props) {
     const nightMode = useContext(nightModeContext).nightMode;
@@ -24,14 +25,14 @@ function MyNavbar(props) {
 
             <h4>{nightMode ? <BsSun /> : <BsSunFill />}</h4>
             <span style={{ marginLeft: '5px' }}></span>
-            <Form.Check defaultChecked type="switch" onChange={() => updateNightMode()} />
+            <Switch defaultChecked color="default" onChange={() => updateNightMode()} />
             <h4>{nightMode ? <BsMoonStarsFill /> : <BsMoonStars />}</h4>
 
             <span style={{ marginLeft: '23%' }}></span>
 
             <Nav >
-                <h1><ImBooks style={{ cursor: 'pointer' }} onClick={() => navigate('/')} /></h1>
-                <Nav.Link active onClick={() => navigate('/')}><h2>Piano di studi</h2></Nav.Link>
+                <h1><ImBooks /></h1>
+                <Nav.Link disabled><h2 style={{color:'black'}}>Piano di studi</h2></Nav.Link>
             </Nav>
 
             <span style={{ marginLeft: '25%' }}></span>
@@ -39,10 +40,10 @@ function MyNavbar(props) {
             {props.loggedIn ?
                 <Nav>
                     <NavDropdown title={<FaUserCheck />} id="basic-nav-dropdown">
-                        <NavDropdown.Item disabled >{props.user.name}</NavDropdown.Item>
-                        <NavDropdown.Item disabled >{
+                        <NavDropdown.Item style={{color: 'black'}} disabled >{props.user.name}</NavDropdown.Item>
+                        <NavDropdown.Item style={{color: 'black'}} disabled>{
                             props.user.iscrizione ?
-                                'Iscrizione '+props.user.iscrizione :
+                                'Iscritto '+props.user.iscrizione :
                                 'Non sei iscritto'
                         }</NavDropdown.Item>
                         <NavDropdown.Divider />

@@ -9,8 +9,6 @@ import MyAlerts from './MyAlerts';
 
 function MyPianoCourse(props) {
 
-    const nightMode = useContext(nightModeContext).nightMode;
-
     let retVal = [];
     retVal.push(<tr key="tr1" style={{ height: '50px' }}>
         <td key="td1" style={{ textAlign: 'center' }}>

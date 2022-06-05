@@ -7,8 +7,6 @@ import { BsClockHistory } from 'react-icons/bs';
 
 function MyPianoCourse(props) {
 
-    const nightMode = useContext(nightModeContext).nightMode;
-
     let retVal = [];
     retVal.push(<tr key="tr1" style={{ height: '50px' }}>
         <td key="td1" style={{ textAlign: 'center' }}>
@@ -101,13 +99,13 @@ function MyPianoStudi(props) {
                             </Table>
                             <div style={{
                                 backgroundColor: nightMode ? '#212529' : '#FBFBFB',
-                                position: 'sticky', bottom: '5%'
+                                position: 'sticky', bottom: '5%', top: '47%'
                             }}>
-                                <span style={{ marginLeft: '70%' }}></span>
+                                <span style={{ marginLeft: '35%' }}></span>
                                 <Button style={stylish} className='btn-sm' variant='secondary'
                                     onClick={() => {
                                         navigate('/pianostudi/modifica');
-                                    }}>Modifica</Button>
+                                    }}>Modifica piano</Button>
                             </div>
                         </>
                     }

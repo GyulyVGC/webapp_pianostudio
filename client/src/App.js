@@ -13,12 +13,9 @@ import nightModeContext from './nightModeContext';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 
 import API from './API';
-import { useLocation } from 'react-router-dom';
 import MyLoginForm from './MyLoginForm';
 
 function App() {
-
-  const location = useLocation();
 
   let [courses, setCourses] = useState([]);
   let [piano, setPiano] = useState([]);

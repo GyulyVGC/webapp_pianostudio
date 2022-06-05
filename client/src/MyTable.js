@@ -6,7 +6,6 @@ import { RiForbid2Line } from 'react-icons/ri';
 import { BsClockHistory } from 'react-icons/bs';
 import { useContext, useState } from 'react';
 import nightModeContext from './nightModeContext';
-import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import MyAlerts from './MyAlerts';
 
@@ -184,7 +183,6 @@ function AddRows(props) {
 }
 
 function MyTable(props) {
-    const navigate = useNavigate();
     const nightMode = useContext(nightModeContext).nightMode;
 
     const location = useLocation();
