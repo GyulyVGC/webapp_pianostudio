@@ -32,6 +32,20 @@ exports.listCourses = () => {
     });
 };
 
+// update iscritti ai corsi
+exports.setIscrittiCourse = (corsoModificato) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'UPDATE CORSO SET ISCRITTI=? WHERE CODICE = ?';
+        db.run(sql, [corsoModificato.iscritti, corsoModificato.codice], function (err) {
+            if (err) {
+                reject(err);
+                return;
+            }
+            resolve(this.lastID);
+        });
+    });
+};
+
 // get corse by codice
 exports.getCourseByCodice = (codice) => {
     return new Promise((resolve, reject) => {
@@ -91,7 +105,7 @@ exports.listPiano = (userID) => {
 exports.setPiano = (corsi, crediti, userID) => {
     return new Promise((resolve, reject) => {
         const sql = 'UPDATE ISCRIZIONE SET CORSI=?, CREDITI=? WHERE IDUSER = ?';
-        db.run(sql, [corsi === null ? null : '['+corsi+']', crediti, userID], function (err) {
+        db.run(sql, [corsi === null ? null : '[' + corsi + ']', crediti, userID], function (err) {
             if (err) {
                 reject(err);
                 return;

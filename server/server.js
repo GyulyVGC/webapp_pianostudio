@@ -82,6 +82,23 @@ app.get('/courses', (req, res) => { //anche per i non loggedIn
     .catch(() => res.status(500).end());
 });
 
+// PUT /courses
+app.put('/courses', isLoggedIn, async (req, res) => {
+  if (Array.isArray(req.body) === false) {
+    return res.status(422).json({ error: 'formato corsi errato' });
+  }
+
+  try {
+    for(let course of req.body){
+      console.log(course)
+      await dao.setIscrittiCourse(course);
+    }
+    res.status(201).end();
+  } catch (err) {
+    res.status(500).json();
+  }
+});
+
 // GET /courses/:codice
 app.get('/courses/:codice',
   async (req, res) => {
@@ -103,7 +120,7 @@ app.get('/courses/:codice',
 app.get('/pianostudi', isLoggedIn, (req, res) => {
   dao.listPiano(req.user.id)
     .then(piano => {
-      setTimeout(() => res.status(200).json(piano), 1500); 
+      setTimeout(() => res.status(200).json(piano), 1500);
     }) //setto timeout per simulare latenza server
     .catch(() => res.status(500).end());
 });
@@ -127,7 +144,7 @@ app.put('/corsi/iscritti', isLoggedIn, async (req, res) => {
   if (req.body.corsi !== null && Array.isArray(req.body.corsi) === false) {
     return res.status(422).json({ error: 'formato corsi errato' });
   }
-
+ 
   try {
     await dao.setPiano(req.body.corsi, req.user.id);
     res.status(201).end();
@@ -165,8 +182,8 @@ app.post('/sessions', function (req, res, next) {
 // PUT /sessions/current
 app.put('/sessions/current', isLoggedIn, async (req, res) => {
   if (req.body.iscrizione !== null
-      && req.body.iscrizione !== 'part-time'
-      && req.body.iscrizione !== 'full-time') {
+    && req.body.iscrizione !== 'part-time'
+    && req.body.iscrizione !== 'full-time') {
     return res.status(422).json();
   }
 

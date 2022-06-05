@@ -41,7 +41,7 @@ function MyPianoCourse(props) {
                     onClick={() => {
                         props.setVett(oldVett =>
                             oldVett.map(c => c.codice === props.course.codice ?
-                                { ...c, iscritti: c.iscritti - 1 } :
+                                { ...c, iscritti: c.iscritti - 1, dirty: true } :
                                 c));
                         props.setPianoProvvisorio(oldPP => oldPP.filter(c => c !== props.course.codice));
                         props.setCreditiProvvisori(oldCrediti => oldCrediti - props.course.crediti);
@@ -164,6 +164,7 @@ function MyModificaPiano(props) {
                                 if (props.user.iscrizione === 'part-time') {
                                     if (props.creditiProvvisori >= 20 && props.creditiProvvisori <= 40) {
                                         props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
+                                        props.updateIscrittiCorsi(props.courses);
                                         navigate('/pianostudi');
                                     }
                                     else {
@@ -173,6 +174,7 @@ function MyModificaPiano(props) {
                                 if (props.user.iscrizione === 'full-time') {
                                     if (props.creditiProvvisori >= 60 && props.creditiProvvisori <= 80) {
                                         props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
+                                        props.updateIscrittiCorsi(props.courses);
                                         navigate('/pianostudi');
                                     }
                                     else {
@@ -185,8 +187,11 @@ function MyModificaPiano(props) {
                             onClick={() => {
                                 props.setCourses(oldVett =>
                                     oldVett.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
-                                        { ...c, iscritti: c.iscritti - 1 } :
+                                        { ...c, iscritti: c.iscritti - 1, dirty: true } :
                                         c));
+                                props.updateIscrittiCorsi(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
+                                    { ...c, iscritti: c.iscritti - 1, dirty: true } :
+                                    c));
                                 props.setCreditiProvvisori(() => 0);
                                 props.setPianoProvvisorio([]);
                                 props.updatePiano([], 0);
@@ -198,10 +203,10 @@ function MyModificaPiano(props) {
                                 props.setCourses(oldVett =>
                                     oldVett.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1
                                         && props.pianoIniziale.filter(p => p === c.codice).length === 0 ?
-                                        { ...c, iscritti: c.iscritti - 1 } :
+                                        { ...c, iscritti: c.iscritti - 1, dirty: false } :
                                         props.pianoProvvisorio.filter(p => p === c.codice).length === 0
                                             && props.pianoIniziale.filter(p => p === c.codice).length === 1 ?
-                                            { ...c, iscritti: c.iscritti + 1 } :
+                                            { ...c, iscritti: c.iscritti + 1, dirty: false } :
                                             c));
                                 props.setPianoProvvisorio(() => props.pianoIniziale);
                                 props.setCreditiProvvisori(() => props.creditiIniziali);

@@ -66,10 +66,12 @@ function App() {
       .catch(err => handleError(err));
   }
 
-  const updatePiano = (piano, crediti) => {
-    setPiano(piano);
-    API.updatePiano(piano.map(c => '"'+c+'"'), crediti)
-      .then(setLoadPiano(true))
+  const updateIscrittiCorsi = (corsi) => {
+    setCourses(corsi); 
+    let arrayCorsiModificati = corsi.filter(c => c.dirty === true);
+    console.log(arrayCorsiModificati)
+    API.updateIscrittiCourses(arrayCorsiModificati)
+      .then(setLoadCorsiInit(true))
       .catch(err => handleError(err));
   }
 
@@ -83,6 +85,13 @@ function App() {
         .catch(err => handleError(err));
     }
   }, [loadCorsiInit]);
+
+  const updatePiano = (piano, crediti) => {
+    setPiano(piano);
+    API.updatePiano(piano.map(c => '"'+c+'"'), crediti)
+      .then(setLoadPiano(true))
+      .catch(err => handleError(err));
+  }
 
   useEffect(() => {
     if (loadPiano) {
@@ -110,45 +119,6 @@ function App() {
     };
     checkAuth();
   }, []);
-
-  /*
-    let addFilm = (film) => {
-      film.status = 'updated';
-      setFilms(oldFilms => oldFilms.concat(film));
-      API.addFilm(film)
-        .then(() => setDirty(true))
-        .catch(err => handleError(err));
-    }
-  */
-  /*
-    let updateFilm = (film) => {
-      const oldFilm = films.filter(f => f.id === film.id)[0];
-      let updateBackend = false;
-      if (oldFilm.title !== film.title
-        || oldFilm.favorite !== film.favorite
-        || oldFilm.rating !== film.rating
-        || oldFilm.date !== film.date) {
-        film.status = 'updated';
-        updateBackend = true;
-      }
-      setFilms(films => films.map(
-        f => (f.id === film.id) ? Object.assign({}, film) : f
-      ));
-      if (updateBackend) {
-        API.updateFilm(film)
-          .then(() => setDirty(true))
-          .catch(err => handleError(err));
-      }
-    }
-  
-    let deleteFilm = (film) => {
-      film.status = 'updated';
-      API.deleteFilm(film.id)
-        .then(() => setDirty(true))
-        .catch(err => handleError(err));
-    }
-  
-  */
 
   const doLogIn = (credentials) => {
     API.logIn(credentials)
@@ -185,7 +155,7 @@ function App() {
   const homePageNoAuth =
     <>
       <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
-        courses={courses} setCourses={setCourses}
+        courses={courses} setCourses={setCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyLoginForm errorMessage={messageLogin} setErrorMessage={setMessageLogin} login={doLogIn}/>
     </>
@@ -193,7 +163,7 @@ function App() {
   const homePageAuthNoIscritto =
     <>
       <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
-        courses={courses} setCourses={setCourses}
+        courses={courses} setCourses={setCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyIscrizione user={user} updateIscrizione={updateIscrizione}/>
     </>
@@ -201,7 +171,7 @@ function App() {
   const homePageAuthIscritto =
     <>
       <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
-        courses={courses} setCourses={setCourses}
+        courses={courses} setCourses={setCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyPianoStudi user={user} piano={piano} courses={courses} loadPiano={loadPiano}/>
     </>
@@ -209,23 +179,24 @@ function App() {
   const editPage =
     <>
       <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
-        courses={courses} setCourses={setCourses}
+        courses={courses} setCourses={setCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyModificaPiano pianoIniziale={piano} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         creditiIniziali={crediti} creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}
+        updateIscrittiCorsi={updateIscrittiCorsi}
         courses={courses} setCourses={setCourses} updatePiano={updatePiano} user={user}/>
     </>
 
   return (
     <nightModeContext.Provider value={nightModeObject}>
-      <MyNavbar loggedIn={loggedIn} logOut={doLogOut} user={user} />
+      <MyNavbar loggedIn={loggedIn} logOut={doLogOut} user={user} piano={piano} />
       <br /><br /><br />
       <Row className={nightMode ? "p-3 mb-2 bg-dark text-white min-vh-100" :
         "p-3 mb-2 bg-light text-black min-vh-100"} >
 
         <Routes>
 
-          <Route path='/' element={loggedIn ?
+          <Route path='/iscrizione' element={loggedIn ?
             homePageAuthNoIscritto :
             <Navigate to='/login' />} />
 
@@ -239,16 +210,6 @@ function App() {
           <Route path='/pianostudi' element={loggedIn ? homePageAuthIscritto : <Navigate to='/login' />} />
 
           <Route path='/pianostudi/modifica' element={loggedIn ? editPage : <Navigate to='/login' />} />
-
-          {/*
-          <Route path='/films' element={loggedIn ? myAppBody : <Navigate to='/login' />} />
-
-          <Route path='/add' element={loggedIn ? <MyForm changeSelettore={changeSelettore} addOrEdit={addFilm} films={films} /> : <Navigate to='/login' />} />
-
-          <Route path='/edit/:iD' element={loggedIn ? <MyForm changeSelettore={changeSelettore} addOrEdit={updateFilm} films={films} /> : <Navigate to='/login' />} />
-
-          <Route path='*' element={<MyNotFound />} />
-          */}
 
         </Routes>
 

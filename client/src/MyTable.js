@@ -39,9 +39,9 @@ function MyCourse(props) {
             statusComponent =
                 <h5><FiPlus style={{ cursor: 'pointer' }}
                     onClick={() => {
-                        props.setVett(oldVett => 
+                        props.setVett(oldVett =>
                             oldVett.map(c => c.codice === props.course.codice ?
-                                {...c, iscritti: c.iscritti + 1} :
+                                { ...c, iscritti: c.iscritti + 1, dirty: true } :
                                 c));
                         props.setPianoProvvisorio(oldPP => oldPP.concat(props.course.codice));
                         props.setCreditiProvvisori(oldCrediti => oldCrediti + props.course.crediti);
@@ -55,7 +55,16 @@ function MyCourse(props) {
                 <span title='Manca il corso propedeutico!'>
                     <h5><RiForbid2Line style={{ cursor: 'pointer' }}
                         onClick={() => {
-                            props.setErrorMessage(() => 'Devi prima inserire il corso propedeutico ('+props.course.propedeutico+').');
+                            props.setErrorMessage(() => 'Devi prima inserire il corso propedeutico (' + props.course.propedeutico + ').');
+                        }} /></h5>
+                </span>
+            break;
+        case 'noPosti':
+            statusComponent =
+                <span title='Limite di iscritti raggiunto!'>
+                    <h5><RiForbid2Line style={{ cursor: 'pointer' }}
+                        onClick={() => {
+                            props.setErrorMessage(() => 'Il corso ' + props.course.codice + ' non ha attualmente posti disponibili.');
                         }} /></h5>
                 </span>
             break;
@@ -65,12 +74,12 @@ function MyCourse(props) {
                     <h5><RiForbid2Line style={{ cursor: 'pointer' }}
                         onClick={() => {
                             let incompatibilita = '';
-                            for(let incomp of incompatibili){
-                                if(props.pianoProvvisorio.filter(pr => pr === incomp).length === 1){
+                            for (let incomp of incompatibili) {
+                                if (props.pianoProvvisorio.filter(pr => pr === incomp).length === 1) {
                                     incompatibilita = incomp;
                                 }
                             }
-                            props.setErrorMessage(() => 'Incompatibile con il corso '+incompatibilita+' già inserito.')
+                            props.setErrorMessage(() => 'Incompatibile con il corso ' + incompatibilita + ' già inserito.')
                         }} /></h5>
                 </span>
             break;
@@ -153,6 +162,9 @@ function getCourseStatus(pianoProvvisorio, course) {
             }
         }
     }
+    else if (course.iscritti === course.maxstudenti) {
+        return 'noPosti';
+    }
     return 'ok';
 }
 
@@ -160,7 +172,7 @@ function AddRows(props) {
     let courseTable = [];
     for (let course of props.vett) {
         let status = getCourseStatus(props.pianoProvvisorio, course);
-        courseTable.push(<MyCourse editPage={props.editPage} key={course.codice} 
+        courseTable.push(<MyCourse editPage={props.editPage} key={course.codice}
             vett={props.vett} setVett={props.setVett}
             course={course} pianoProvvisorio={props.pianoProvvisorio}
             creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}

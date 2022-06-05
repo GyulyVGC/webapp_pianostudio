@@ -21,6 +21,29 @@ async function getCourses() {
   }
 }
 
+function updateIscrittiCourses(corsiModificati) {
+  // call: PUT /courses
+  return new Promise((resolve, reject) => {
+    fetch(URL + '/courses', {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(corsiModificati)
+    }).then((response) => {
+      if (response.ok) {
+        resolve(null);
+      } else {
+        // analyze the cause of error
+        response.json()
+          .then((obj) => { reject(obj); }) // error message in the response body
+          .catch(() => { reject({ error: "Cannot parse server response." }) }); // something else
+      }
+    }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
+  });
+}
+
 async function getPiano() {
   // call: GET /pianostudi
   const response = await fetch(URL + '/pianostudi', { credentials: 'include' });
@@ -138,5 +161,5 @@ async function getUserInfo() {
 }
 
 
-const API = { getCourses, storeUpdatedIscrizione, updatePiano, getPiano, logIn, logOut, getUserInfo };
+const API = { getCourses, updateIscrittiCourses, storeUpdatedIscrizione, updatePiano, getPiano, logIn, logOut, getUserInfo };
 export default API;

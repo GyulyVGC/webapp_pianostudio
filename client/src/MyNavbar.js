@@ -46,6 +46,10 @@ function MyNavbar(props) {
                                 'Non sei iscritto'
                         }</NavDropdown.Item>
                         <NavDropdown.Divider />
+                        {<span title={props.piano.length === 0 ? '' : 'Devi prima eliminare il tuo piano!'}>
+                            <NavDropdown.Item className={props.piano.length === 0 ? '' : 'disabled'}
+                            onClick={() => navigate('/iscrizione')}>Modifica iscrizione</NavDropdown.Item>
+                        </span>}
                         <NavDropdown.Item onClick={props.logOut}>Logout</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
