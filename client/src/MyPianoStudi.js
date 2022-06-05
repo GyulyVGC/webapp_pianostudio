@@ -58,56 +58,60 @@ function MyPianoStudi(props) {
             <br />
             <h2>Piano di studi</h2>
             <br />
-            {props.piano.length === 0 ?
+            {props.loadPianoInit ?
+                <><h2>Ricevo il piano dal server...</h2></> :
                 <>
-                    {props.loadPiano ? <h4>Sincronizzo... <BsClockHistory/></h4> : false}
-                    <br />
-                    <div style={{
-                        position: 'fixed',
-                        right: '1%',
-                        left: '76%'
-                    }}>
-                        <hr />
-                        <h5>
-                            <span style={{ marginLeft: '7%' }} />
-                            Il tuo piano di studi è vuoto.
-                            <br /><br />
-                            <span style={{ marginLeft: '27%' }} />
-                            <Button style={stylish} onClick={() => {
-                                navigate('/pianostudi/modifica');
-                            }} >Aggiungi corsi</Button>
-                        </h5>
-                        <hr />
-                    </div>
-                </>
-                :
-                <>
-                    {props.loadPiano ? <h4>Sincronizzo... <BsClockHistory/></h4> : false}
-                    <Table hover variant={nightMode ? "dark" : "light"} >
-                        <tbody >
-                            <tr style={{
-                                color: nightMode ? '#ff9900' : '#003cb3',
-                                position: 'sticky', top: '11%'
+                    {props.piano.length === 0 ?
+                        <>
+                            {props.loadPiano ? <h4>Sincronizzo... <BsClockHistory /></h4> : false}
+                            <br />
+                            <div style={{
+                                position: 'fixed',
+                                right: '1%',
+                                left: '76%'
                             }}>
-                                <th style={{ textAlign: 'center' }}>Codice</th>
-                                <th>Nome</th>
-                                <th style={{ textAlign: 'center' }}>Crediti</th>
-                            </tr>
-                            <AddPianoRows piano={props.piano} vett={props.courses} />
-                        </tbody>
-                    </Table>
-                    <div style={{
-                        backgroundColor: nightMode ? '#212529' : '#FBFBFB',
-                        position: 'sticky', bottom: '5%'
-                    }}>
-                        <span style={{ marginLeft: '70%' }}></span>
-                        <Button style={stylish} className='btn-sm' variant='secondary'
-                            onClick={() => {
-                                navigate('/pianostudi/modifica');
-                            }}>Modifica</Button>
-                    </div>
-                </>
-            }
+                                <hr />
+                                <h5>
+                                    <span style={{ marginLeft: '7%' }} />
+                                    Il tuo piano di studi è vuoto.
+                                    <br /><br />
+                                    <span style={{ marginLeft: '27%' }} />
+                                    <Button style={stylish} onClick={() => {
+                                        navigate('/pianostudi/modifica');
+                                    }} >Aggiungi corsi</Button>
+                                </h5>
+                                <hr />
+                            </div>
+                        </>
+                        :
+                        <>
+                            {props.loadPiano ? <h4>Sincronizzo... <BsClockHistory /></h4> : false}
+                            <Table hover variant={nightMode ? "dark" : "light"} >
+                                <tbody >
+                                    <tr style={{
+                                        color: nightMode ? '#ff9900' : '#003cb3',
+                                        position: 'sticky', top: '11%'
+                                    }}>
+                                        <th style={{ textAlign: 'center' }}>Codice</th>
+                                        <th>Nome</th>
+                                        <th style={{ textAlign: 'center' }}>Crediti</th>
+                                    </tr>
+                                    <AddPianoRows piano={props.piano} vett={props.courses} />
+                                </tbody>
+                            </Table>
+                            <div style={{
+                                backgroundColor: nightMode ? '#212529' : '#FBFBFB',
+                                position: 'sticky', bottom: '5%'
+                            }}>
+                                <span style={{ marginLeft: '70%' }}></span>
+                                <Button style={stylish} className='btn-sm' variant='secondary'
+                                    onClick={() => {
+                                        navigate('/pianostudi/modifica');
+                                    }}>Modifica</Button>
+                            </div>
+                        </>
+                    }
+                </>}
             <br />
         </Col>
     )

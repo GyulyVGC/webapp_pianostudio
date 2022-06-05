@@ -7,10 +7,32 @@ import { useContext } from 'react';
 function MyNotFound() {
     const navigate = useNavigate();
     const nightMode = useContext(nightModeContext).nightMode;
+
+    let stylish = nightMode ?
+        {
+            background: "#F1C821",
+            color: 'black',
+            borderColor: 'red',
+            borderWidth: '2px'
+        } :
+        {
+            background: "#B4E7E4",
+            color: 'black',
+            borderColor: 'blue',
+            borderWidth: '2px'
+        };
+
     return (
-        <>
-            <h1>Error: route not found <Button onClick={() => navigate('/')} variant={nightMode ? 'warning' : 'secondary'} >Back home</Button></h1>
-        </>
+        <div style={{ position: 'fixed', top: '38%' }}>
+            <h1>
+                <hr />
+                <span style={{ marginLeft: '10%' }} />
+                La pagina richiesta non esiste
+                <span style={{ marginLeft: '25%' }} />
+                <Button style={stylish} onClick={() => navigate('/')} >Vai all'applicazione</Button>
+                <hr />
+            </h1>
+        </div>
     );
 }
 

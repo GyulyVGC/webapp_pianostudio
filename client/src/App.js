@@ -3,31 +3,19 @@ import { Row } from 'react-bootstrap';
 import './App.css';
 import React, { useEffect, useState } from 'react';
 import MyNavbar from './MyNavbar.js';
-import MyFilters from './MyFilters.js';
 import MyTable from './MyTable.js';
 import MyFooter from './MyFooter.js';
-import MyForm from './MyForm';
 import MyNotFound from './MyNotFound';
 import MyIscrizione from './MyIscrizione';
 import MyPianoStudi from './MyPianoStudi';
 import MyModificaPiano from './MyModificaPiano';
-import MyAlerts from './MyAlerts';
 import nightModeContext from './nightModeContext';
 import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
 
 import API from './API';
 import { useLocation } from 'react-router-dom';
 import MyLoginForm from './MyLoginForm';
-/*
-let pathToSelector = {
-  '/': 'All',
-  '/films': 'All',
-  '/films/favorites': 'Favorites',
-  '/films/bestRated': 'Best rated',
-  '/films/seenLastMonth': 'Seen last month',
-  '/films/unseen': 'Unseen',
-};
-*/
+
 function App() {
 
   const location = useLocation();
@@ -40,8 +28,10 @@ function App() {
   let nightModeObject = { nightMode: nightMode, updateNightMode: updateNightMode };
 
   const [loadCorsiInit, setLoadCorsiInit] = useState(true);
-  //const [loadPianoInit, setLoadPianoInit] = useState(true);
-  const [loadPiano, setLoadPiano] = useState(true);
+  const [loadPianoInit, setLoadPianoInit] = useState(true);
+  const [loadCorsi, setLoadCorsi] = useState(false);
+  const [loadPiano, setLoadPiano] = useState(false);
+
   const navigate = useNavigate();
 
   const [loggedIn, setLoggedIn] = useState(false);  // no user is logged in when app loads
@@ -71,20 +61,21 @@ function App() {
     let arrayCorsiModificati = corsi.filter(c => c.dirty === true);
     console.log(arrayCorsiModificati)
     API.updateIscrittiCourses(arrayCorsiModificati)
-      .then(setLoadCorsiInit(true))
+      .then(setLoadCorsi(true))
       .catch(err => handleError(err));
   }
 
   useEffect(() => {
-    if (loadCorsiInit) {
+    if (loadCorsi || loadCorsiInit) {
       API.getCourses()
         .then((courses) => {
           setCourses(courses);
+          setLoadCorsi(false);
           setLoadCorsiInit(false);
         })
         .catch(err => handleError(err));
     }
-  }, [loadCorsiInit]);
+  }, [loadCorsi, loadCorsiInit]);
 
   const updatePiano = (piano, crediti) => {
     setPiano(piano);
@@ -94,7 +85,7 @@ function App() {
   }
 
   useEffect(() => {
-    if (loadPiano) {
+    if (loadPiano || loadPianoInit) {
       API.getPiano()
         .then((piano) => {
           setPiano(piano.corsi);
@@ -102,10 +93,11 @@ function App() {
           setCrediti(piano.crediti);
           setCreditiProvvisori(piano.crediti);
           setLoadPiano(false);
+          setLoadPianoInit(false);
         })
         .catch(err => handleError(err));
     }
-  }, [loadPiano]);
+  }, [loadPiano, loadPianoInit]);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -126,8 +118,8 @@ function App() {
         setLoggedIn(true);
         setUser(user);
         setMessageLogin('');
-        setLoadPiano(false);
-        setLoadPiano(true);
+        setLoadPianoInit(false);
+        setLoadPianoInit(true);
         user.iscrizione === null ?
           navigate('/iscrizione') :
           navigate('/pianostudi');
@@ -149,7 +141,8 @@ function App() {
 
   const homePageNoAuth =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi}
+        pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         courses={courses} setCourses={setCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyLoginForm errorMessage={messageLogin} setErrorMessage={setMessageLogin} login={doLogIn}/>
@@ -157,7 +150,8 @@ function App() {
 
   const homePageAuthNoIscritto =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi}
+        pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         courses={courses} setCourses={setCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyIscrizione user={user} updateIscrizione={updateIscrizione}/>
@@ -165,15 +159,18 @@ function App() {
 
   const homePageAuthIscritto =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi}
+        pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         courses={courses} setCourses={setCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
-      <MyPianoStudi user={user} piano={piano} courses={courses} loadPiano={loadPiano}/>
+      <MyPianoStudi user={user} piano={piano} courses={courses} 
+        loadPiano={loadPiano} loadPianoInit={loadPianoInit}/>
     </>
 
   const editPage =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
+      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi}
+        pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
         courses={courses} setCourses={setCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={setCreditiProvvisori}/>
       <MyModificaPiano pianoIniziale={piano} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={setPianoProvvisorio}
@@ -205,6 +202,10 @@ function App() {
           <Route path='/pianostudi' element={loggedIn ? homePageAuthIscritto : <Navigate to='/login' />} />
 
           <Route path='/pianostudi/modifica' element={loggedIn ? editPage : <Navigate to='/login' />} />
+
+          <Route path='/' element={<Navigate to='/pianostudi'/>} />
+
+          <Route path='*' element={<MyNotFound />} />
 
         </Routes>
 

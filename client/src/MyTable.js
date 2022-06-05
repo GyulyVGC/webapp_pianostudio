@@ -3,6 +3,7 @@ import { Col, Table } from 'react-bootstrap';
 import { GiExpand, GiContract } from 'react-icons/gi';
 import { FiPlus } from 'react-icons/fi';
 import { RiForbid2Line } from 'react-icons/ri';
+import { BsClockHistory } from 'react-icons/bs';
 import { useContext, useState } from 'react';
 import nightModeContext from './nightModeContext';
 import { useNavigate } from 'react-router-dom';
@@ -200,28 +201,31 @@ function MyTable(props) {
         <br />
         {props.loadCorsiInit ?
             <><h2>Ricevo i corsi dal server...</h2></> :
-            <Table hover variant={nightMode ? "dark" : "light"}>
-                <tbody >
-                    <tr style={{
-                        color: nightMode ? '#ff9900' : '#003cb3',
-                        position: 'sticky', top: errorMessage ? '18%' : '11%'
-                    }}>
-                        <th style={{ textAlign: 'center' }}>Codice</th>
-                        <th>Nome</th>
-                        <th style={{ textAlign: 'center' }}>Crediti</th>
-                        <th style={{ textAlign: 'center' }}>Iscritti</th>
-                        <th style={{ textAlign: 'center' }}>Limite&nbsp;iscritti<nobr /></th>
-                        <th style={{ textAlign: 'center' }}>Dettagli</th>
-                        {editPage ?
-                            <th style={{ textAlign: 'center' }}>Aggiungi</th> :
-                            ''}
-                    </tr>
-                    <AddRows editPage={editPage} vett={props.courses} setVett={props.setCourses}
-                        pianoProvvisorio={props.pianoProvvisorio} setPianoProvvisorio={props.setPianoProvvisorio}
-                        creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
-                        errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
-                </tbody>
-            </Table>
+            <>
+                {props.loadCorsi ? <h4>Sincronizzo... <BsClockHistory /></h4> : false}
+                <Table hover variant={nightMode ? "dark" : "light"}>
+                    <tbody >
+                        <tr style={{
+                            color: nightMode ? '#ff9900' : '#003cb3',
+                            position: 'sticky', top: errorMessage ? '18%' : '11%'
+                        }}>
+                            <th style={{ textAlign: 'center' }}>Codice</th>
+                            <th>Nome</th>
+                            <th style={{ textAlign: 'center' }}>Crediti</th>
+                            <th style={{ textAlign: 'center' }}>Iscritti</th>
+                            <th style={{ textAlign: 'center' }}>Limite&nbsp;iscritti<nobr /></th>
+                            <th style={{ textAlign: 'center' }}>Dettagli</th>
+                            {editPage ?
+                                <th style={{ textAlign: 'center' }}>Aggiungi</th> :
+                                ''}
+                        </tr>
+                        <AddRows editPage={editPage} vett={props.courses} setVett={props.setCourses}
+                            pianoProvvisorio={props.pianoProvvisorio} setPianoProvvisorio={props.setPianoProvvisorio}
+                            creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
+                            errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
+                    </tbody>
+                </Table>
+            </>
         }
     </Col>);
 
