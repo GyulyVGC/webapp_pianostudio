@@ -146,11 +146,6 @@ function App() {
     setMessageLogin('');
     navigate('/login');
   }
-  /*
-    const myAppBody = <> <MyFilters setInitialLoading={setInitialLoading} setDirty={setDirty} selettore={selettore} changeSelettore={changeSelettore} />
-      <MyTable initialLoading={initialLoading} films={films} selettore={selettore}
-        deleteFilm={deleteFilm} updateFilm={updateFilm} /></>;
-  */
 
   const homePageNoAuth =
     <>
@@ -190,22 +185,22 @@ function App() {
   return (
     <nightModeContext.Provider value={nightModeObject}>
       <MyNavbar loggedIn={loggedIn} logOut={doLogOut} user={user} piano={piano} />
-      <br /><br /><br />
+      <div style={{height: '11vh'}}></div>
       <Row className={nightMode ? "p-3 mb-2 bg-dark text-white min-vh-100" :
         "p-3 mb-2 bg-light text-black min-vh-100"} >
 
         <Routes>
 
-          <Route path='/iscrizione' element={loggedIn ?
-            homePageAuthNoIscritto :
-            <Navigate to='/login' />} />
-
-          <Route path='/login' element={loggedIn ?
+        <Route path='/login' element={loggedIn ?
             (user.iscrizione === null ?
               <Navigate to='/iscrizione' /> :
               <Navigate to='/pianostudi' />
             ) :
             homePageNoAuth} />
+
+          <Route path='/iscrizione' element={loggedIn ?
+            homePageAuthNoIscritto :
+            <Navigate to='/login' />} />
 
           <Route path='/pianostudi' element={loggedIn ? homePageAuthIscritto : <Navigate to='/login' />} />
 
