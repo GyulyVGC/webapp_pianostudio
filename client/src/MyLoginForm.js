@@ -6,6 +6,7 @@ import MyAlerts from './MyAlerts';
 function MyLoginForm(props) {
     const [username, setUsername] = useState('testuser@polito.it');
     const [password, setPassword] = useState('password');
+    const [mostra, setMostra] = useState(false);
 
     const nightMode = useContext(nightModeContext).nightMode;
 
@@ -71,7 +72,10 @@ function MyLoginForm(props) {
                 <br />
                 <Form.Group controlId='password'>
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type='password' value={password} onChange={ev => setPassword(ev.target.value)} />
+                    <span style={{marginLeft: '50%'}} />
+                    <input type="checkbox" onClick={() => setMostra(oldMostra => !oldMostra)} /> mostra
+                    <Form.Control type={mostra ? 'text' : 'password'} value={password} onChange={ev => setPassword(ev.target.value)} />
+
                 </Form.Group>
 
                 <br />

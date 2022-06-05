@@ -25,7 +25,9 @@ function MyIscrizione(props) {
     return (
         <Col key='col2' sm={3} style={{ borderLeft: '2px dotted' }}>
             <br />
-            <h2>Modifica iscrizione</h2>
+            <h2>Ciao {props.user.name}</h2>
+            <br/>
+            <h5>Qui puoi monitorare lo stato della tua iscrizione.</h5>
             <br />
             <div style={{
                 position: 'fixed',

@@ -1,9 +1,7 @@
 const express = require('express');
 const morgan = require('morgan'); // logging middleware
-const { check, validationResult } = require('express-validator'); // validation middleware
 const dao = require('./dao'); // module for accessing the DB
 const cors = require('cors');
-const dayjs = require("dayjs");
 
 const passport = require('passport'); // auth middleware
 const LocalStrategy = require('passport-local').Strategy; // username and password for login
