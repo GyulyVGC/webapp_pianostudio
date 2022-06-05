@@ -24,7 +24,6 @@ function MyNavbar(props) {
             <span style={{ marginLeft: '10%' }}></span>
 
             <h4>{nightMode ? <BsSun /> : <BsSunFill />}</h4>
-            <span style={{ marginLeft: '5px' }}></span>
             <Switch defaultChecked color="default" onChange={() => updateNightMode()} />
             <h4>{nightMode ? <BsMoonStarsFill /> : <BsMoonStars />}</h4>
 

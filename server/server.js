@@ -10,6 +10,8 @@ const LocalStrategy = require('passport-local').Strategy; // username and passwo
 const session = require('express-session'); // enable sessions
 const userDao = require('./user-dao');
 
+const ritardo = 0; //millisecondi
+
 /*** Set up Passport ***/
 // set up the "username and password" login strategy
 // by setting a function to verify username and password
@@ -78,7 +80,7 @@ app.use(passport.session());
 // GET /courses
 app.get('/courses', (req, res) => { //anche per i non loggedIn
   dao.listCourses()
-    .then(courses => setTimeout(() => res.status(200).json(courses), 1500)) //setto timeout per simulare latenza server
+    .then(courses => setTimeout(() => res.status(200).json(courses), ritardo)) //setto timeout per simulare latenza server
     .catch(() => res.status(500).end());
 });
 
@@ -120,7 +122,7 @@ app.get('/courses/:codice',
 app.get('/pianostudi', isLoggedIn, (req, res) => {
   dao.listPiano(req.user.id)
     .then(piano => {
-      setTimeout(() => res.status(200).json(piano), 1500);
+      setTimeout(() => res.status(200).json(piano), ritardo);
     }) //setto timeout per simulare latenza server
     .catch(() => res.status(500).end());
 });

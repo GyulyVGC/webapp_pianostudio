@@ -37,12 +37,11 @@ function MyPianoCourse(props) {
                 </span> :
                 <h5><FiMinus style={{ cursor: 'pointer' }}
                     onClick={() => {
-                        props.setVett(oldVett =>
-                            oldVett.map(c => c.codice === props.course.codice ?
+                        props.setVett(props.vett.map(c => c.codice === props.course.codice ?
                                 { ...c, iscritti: c.iscritti - 1, dirty: true } :
                                 c));
-                        props.setPianoProvvisorio(oldPP => oldPP.filter(c => c !== props.course.codice));
-                        props.setCreditiProvvisori(oldCrediti => oldCrediti - props.course.crediti);
+                        props.setPianoProvvisorio(props.pianoProvvisorio.filter(c => c !== props.course.codice));
+                        props.setCreditiProvvisori(props.creditiProvvisori - props.course.crediti);
                     }} /></h5>}
         </td>
     </tr>);
@@ -183,14 +182,13 @@ function MyModificaPiano(props) {
                         <span style={{ marginLeft: '13%' }}></span>
                         <Button style={{ color: 'black' }} className='btn-sm' variant='danger'
                             onClick={() => {
-                                props.setCourses(oldVett =>
-                                    oldVett.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
+                                props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
                                         { ...c, iscritti: c.iscritti - 1, dirty: true } :
                                         c));
                                 props.updateIscrittiCorsi(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
                                     { ...c, iscritti: c.iscritti - 1, dirty: true } :
                                     c));
-                                props.setCreditiProvvisori(() => 0);
+                                props.setCreditiProvvisori(0);
                                 props.setPianoProvvisorio([]);
                                 props.updatePiano([], 0);
                                 navigate('/pianostudi');
@@ -198,16 +196,15 @@ function MyModificaPiano(props) {
                         <span style={{ marginLeft: '10%' }}></span>
                         <Button style={{ color: 'black' }} className='btn-sm' variant='secondary'
                             onClick={() => {
-                                props.setCourses(oldVett =>
-                                    oldVett.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1
+                                props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1
                                         && props.pianoIniziale.filter(p => p === c.codice).length === 0 ?
                                         { ...c, iscritti: c.iscritti - 1, dirty: false } :
                                         props.pianoProvvisorio.filter(p => p === c.codice).length === 0
                                             && props.pianoIniziale.filter(p => p === c.codice).length === 1 ?
                                             { ...c, iscritti: c.iscritti + 1, dirty: false } :
                                             c));
-                                props.setPianoProvvisorio(() => props.pianoIniziale);
-                                props.setCreditiProvvisori(() => props.creditiIniziali);
+                                props.setPianoProvvisorio(props.pianoIniziale);
+                                props.setCreditiProvvisori(props.creditiIniziali);
                                 navigate('/pianostudi');
                             }}>Annulla modifiche</Button>
                     </div>

@@ -1,4 +1,4 @@
-import { Form, Button, Alert, Container, Row, Col } from 'react-bootstrap';
+import { Form, Button, Col } from 'react-bootstrap';
 import { useState, useContext } from 'react';
 import nightModeContext from './nightModeContext';
 import MyAlerts from './MyAlerts';

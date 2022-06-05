@@ -1,4 +1,3 @@
-const dayjs = require("dayjs");
 const URL = 'http://localhost:3001'
 
 async function getCourses() {
@@ -79,27 +78,6 @@ function updatePiano(corsi, crediti) {
     }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
   });
 }
-
-function deleteFilm(id) {
-  // call: DELETE /films/:id
-  return new Promise((resolve, reject) => {
-    fetch(URL + '/films/' + id, {
-      method: 'DELETE',
-      credentials: 'include'
-    }).then((response) => {
-      if (response.ok) {
-        resolve(null);
-      } else {
-        // analyze the cause of error
-        response.json()
-          .then((message) => { reject(message); }) // error message in the response body
-          .catch(() => { reject({ error: "Cannot parse server response." }) }); // something else
-      }
-    }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
-  });
-}
-
-
 
 function storeUpdatedIscrizione(user) {
   // call: PUT /sessions/current

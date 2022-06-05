@@ -39,12 +39,11 @@ function MyCourse(props) {
             statusComponent =
                 <h5><FiPlus style={{ cursor: 'pointer' }}
                     onClick={() => {
-                        props.setVett(oldVett =>
-                            oldVett.map(c => c.codice === props.course.codice ?
+                        props.setVett(props.vett.map(c => c.codice === props.course.codice ?
                                 { ...c, iscritti: c.iscritti + 1, dirty: true } :
                                 c));
-                        props.setPianoProvvisorio(oldPP => oldPP.concat(props.course.codice));
-                        props.setCreditiProvvisori(oldCrediti => oldCrediti + props.course.crediti);
+                        props.setPianoProvvisorio(props.pianoProvvisorio.concat(props.course.codice));
+                        props.setCreditiProvvisori(props.creditiProvvisori + props.course.crediti);
                     }} /></h5>;
             break;
         case 'alreadyInserted':
