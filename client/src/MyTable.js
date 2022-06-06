@@ -194,6 +194,9 @@ function MyTable(props) {
         {errorMessage ?
             <MyAlerts type='info' message={errorMessage} position='11%'
                 setMessage={setErrorMessage}></MyAlerts> :
+            props.serverError ?
+            <MyAlerts type='error' message={props.serverError} position='11%'
+            setMessage={props.setServerError}></MyAlerts> :
             false}
         <br />
         {props.loadCorsiInit ?
@@ -204,7 +207,7 @@ function MyTable(props) {
                     <tbody >
                         <tr style={{
                             color: nightMode ? '#ff9900' : '#003cb3',
-                            position: 'sticky', top: errorMessage ? '18%' : '11%'
+                            position: 'sticky', top: errorMessage || props.serverError ? '18%' : '11%'
                         }}>
                             <th style={{ textAlign: 'center' }}>Codice</th>
                             <th>Nome</th>

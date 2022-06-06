@@ -35,6 +35,7 @@ function App() {
   const [user, setUser] = useState({});
 
   const [messageLogin, setMessageLogin] = useState('');
+  const [serverError, setServerError] = useState('');
 
   let [crediti, setCrediti] = useState(0);
   let [creditiProvvisori, setCreditiProvvisori] = useState(0);
@@ -51,8 +52,8 @@ function App() {
     setCreditiProvvisori(crediti);
   }
 
-  function handleError(err) {
-    console.log(err);
+  function handleServerError(errObj) {
+    setServerError(errObj.error);
   }
 
   const updateIscrizione = (tipoIscrizione) => {
@@ -62,7 +63,7 @@ function App() {
     });
     API.storeUpdatedIscrizione({ ...user, iscrizione: tipoIscrizione })
       .then()
-      .catch(err => handleError(err));
+      .catch(err => handleServerError(err));
   }
 
   const updateIscrittiCorsi = (corsi) => {
@@ -70,7 +71,7 @@ function App() {
     let arrayCorsiModificati = corsi.filter(c => c.dirty === true);
     API.updateIscrittiCourses(arrayCorsiModificati)
       .then(() => setLoadCorsi(true))
-      .catch(err => handleError(err));
+      .catch(err => handleServerError(err));
   }
 
   useEffect(() => {
@@ -81,7 +82,7 @@ function App() {
           setLoadCorsi(false);
           setLoadCorsiInit(false);
         })
-        .catch(err => handleError(err));
+        .catch(err => handleServerError(err));
     }
   }, [loadCorsi, loadCorsiInit]);
 
@@ -89,7 +90,7 @@ function App() {
     setPiano(piano);
     API.updatePiano(piano.map(c => '"'+c+'"'), crediti)
       .then(() => setLoadPiano(true))
-      .catch(err => handleError(err));
+      .catch(err => handleServerError(err));
   }
 
   useEffect(() => {
@@ -103,7 +104,7 @@ function App() {
           setLoadPiano(false);
           setLoadPianoInit(false);
         })
-        .catch(err => handleError(err));
+        .catch(err => handleServerError(err));
     }
   }, [loadPiano, loadPianoInit, loggedIn]);
 
@@ -114,7 +115,7 @@ function App() {
         setLoggedIn(true);
         setUser(user);
       } catch (err) {
-        handleError(err);
+        handleServerError(err);
       }
     };
     checkAuth();
@@ -126,6 +127,7 @@ function App() {
         setLoggedIn(true);
         setUser(user);
         setMessageLogin('');
+        setServerError('');
         setLoadPianoInit(false);
         setLoadPianoInit(true);
         user.iscrizione === null ?
@@ -149,7 +151,8 @@ function App() {
 
   const homePageNoAuth =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi}
+      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi} 
+        serverError={serverError} setServerError={setServerError}
         pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={updatePianoProvvisorio}
         courses={courses} setCourses={updateCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={updateCreditiProvvisori}/>
@@ -158,7 +161,8 @@ function App() {
 
   const homePageAuthNoIscritto =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi}
+      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi} 
+        serverError={serverError} setServerError={setServerError}
         pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={updatePianoProvvisorio}
         courses={courses} setCourses={updateCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={updateCreditiProvvisori}/>
@@ -167,7 +171,8 @@ function App() {
 
   const homePageAuthIscritto =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi}
+      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi} 
+        serverError={serverError} setServerError={setServerError}
         pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={updatePianoProvvisorio}
         courses={courses} setCourses={updateCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={updateCreditiProvvisori}/>
@@ -177,7 +182,8 @@ function App() {
 
   const editPage =
     <>
-      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi}
+      <MyTable loadCorsiInit={loadCorsiInit} loadCorsi={loadCorsi} 
+        serverError={serverError} setServerError={setServerError}
         pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={updatePianoProvvisorio}
         courses={courses} setCourses={updateCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={updateCreditiProvvisori}/>

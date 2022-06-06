@@ -2,9 +2,11 @@ import { Form, Button, Col } from 'react-bootstrap';
 import { useState, useContext } from 'react';
 import nightModeContext from './nightModeContext';
 import MyAlerts from './MyAlerts';
+import Checkbox from '@mui/material/Checkbox';
+import { FormControlLabel } from '@mui/material';
 
 function MyLoginForm(props) {
-    const [username, setUsername] = useState('testuser@polito.it');
+    const [username, setUsername] = useState('io@io.it');
     const [password, setPassword] = useState('password');
     const [mostra, setMostra] = useState(false);
 
@@ -72,8 +74,9 @@ function MyLoginForm(props) {
                 <br />
                 <Form.Group controlId='password'>
                     <Form.Label>Password</Form.Label>
-                    <span style={{marginLeft: '50%'}} />
-                    <input type="checkbox" onClick={() => setMostra(oldMostra => !oldMostra)} /> mostra
+                    <span style={{marginLeft: '40%'}} />
+                    <FormControlLabel control={<Checkbox size='small' color={nightMode ? 'warning' : 'primary'} 
+                        onClick={() => setMostra(oldMostra => !oldMostra)}/>}  label='mostra'/>
                     <Form.Control type={mostra ? 'text' : 'password'} value={password} onChange={ev => setPassword(ev.target.value)} />
 
                 </Form.Group>

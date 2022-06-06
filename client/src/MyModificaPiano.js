@@ -38,8 +38,8 @@ function MyPianoCourse(props) {
                 <h5><FiMinus style={{ cursor: 'pointer' }}
                     onClick={() => {
                         props.setVett(props.vett.map(c => c.codice === props.course.codice ?
-                                { ...c, iscritti: c.iscritti - 1, dirty: true } :
-                                c));
+                            { ...c, iscritti: c.iscritti - 1, dirty: true } :
+                            c));
                         props.setPianoProvvisorio(props.pianoProvvisorio.filter(c => c !== props.course.codice));
                         props.setCreditiProvvisori(props.creditiProvvisori - props.course.crediti);
                     }} /></h5>}
@@ -95,6 +95,58 @@ function MyModificaPiano(props) {
             borderWidth: '2px'
         };
 
+    let buttonSalva = <Button className='btn-sm' style={stylish}
+        onClick={() => {
+            if (props.user.iscrizione === 'part-time') {
+                if (props.creditiProvvisori >= 20 && props.creditiProvvisori <= 40) {
+                    props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
+                    props.updateIscrittiCorsi(props.courses);
+                    navigate('/pianostudi');
+                }
+                else {
+                    setErrorMessage(() => 'Devi inserire tra 20 e 40 crediti.');
+                }
+            }
+            if (props.user.iscrizione === 'full-time') {
+                if (props.creditiProvvisori >= 60 && props.creditiProvvisori <= 80) {
+                    props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
+                    props.updateIscrittiCorsi(props.courses);
+                    navigate('/pianostudi');
+                }
+                else {
+                    setErrorMessage(() => 'Devi inserire tra 60 e 80 crediti.');
+                }
+            }
+        }}>Salva</Button>;
+
+    let buttonElimina = <Button style={{ color: 'black' }} className='btn-sm' variant='danger'
+        onClick={() => {
+            props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
+                { ...c, iscritti: c.iscritti - 1, dirty: true } :
+                c));
+            props.updateIscrittiCorsi(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
+                { ...c, iscritti: c.iscritti - 1, dirty: true } :
+                c));
+            props.setCreditiProvvisori(0);
+            props.setPianoProvvisorio([]);
+            props.updatePiano([], 0);
+            navigate('/pianostudi');
+        }}>Elimina piano</Button>;
+
+    let buttonAnnulla = <Button style={{ color: 'black' }} className='btn-sm' variant='secondary'
+        onClick={() => {
+            props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1
+                && props.pianoIniziale.filter(p => p === c.codice).length === 0 ?
+                { ...c, iscritti: c.iscritti - 1, dirty: false } :
+                props.pianoProvvisorio.filter(p => p === c.codice).length === 0
+                    && props.pianoIniziale.filter(p => p === c.codice).length === 1 ?
+                    { ...c, iscritti: c.iscritti + 1, dirty: false } :
+                    c));
+            props.setPianoProvvisorio(props.pianoIniziale);
+            props.setCreditiProvvisori(props.creditiIniziali);
+            navigate('/pianostudi');
+        }}>Annulla modifiche</Button>;
+
     return (
         <Col key='col2' sm={4} style={{ borderLeft: '2px dotted' }}>
             <br />
@@ -119,6 +171,13 @@ function MyModificaPiano(props) {
                             Inizia ad aggiungere i corsi che vorresti frequentare.
                             <br />
                         </h5>
+                        <br />
+                        <span style={{ marginLeft: '3%' }}></span>
+                        {buttonSalva}
+                        <span style={{ marginLeft: '13%' }}></span>
+                        {buttonElimina}
+                        <span style={{ marginLeft: '10%' }}></span>
+                        {buttonAnnulla}
                         <hr />
                     </div>
                 </>
@@ -156,57 +215,11 @@ function MyModificaPiano(props) {
                         Al momento hai inserito {props.creditiProvvisori} crediti.
                         <br />
                         <span style={{ marginLeft: '3%' }}></span>
-                        <Button className='btn-sm' style={stylish}
-                            onClick={() => {
-                                if (props.user.iscrizione === 'part-time') {
-                                    if (props.creditiProvvisori >= 20 && props.creditiProvvisori <= 40) {
-                                        props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
-                                        props.updateIscrittiCorsi(props.courses);
-                                        navigate('/pianostudi');
-                                    }
-                                    else {
-                                        setErrorMessage(() => 'Devi inserire tra 20 e 40 crediti.');
-                                    }
-                                }
-                                if (props.user.iscrizione === 'full-time') {
-                                    if (props.creditiProvvisori >= 60 && props.creditiProvvisori <= 80) {
-                                        props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
-                                        props.updateIscrittiCorsi(props.courses);
-                                        navigate('/pianostudi');
-                                    }
-                                    else {
-                                        setErrorMessage(() => 'Devi inserire tra 60 e 80 crediti.');
-                                    }
-                                }
-                            }}>Salva</Button>
+                        {buttonSalva}
                         <span style={{ marginLeft: '13%' }}></span>
-                        <Button style={{ color: 'black' }} className='btn-sm' variant='danger'
-                            onClick={() => {
-                                props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
-                                        { ...c, iscritti: c.iscritti - 1, dirty: true } :
-                                        c));
-                                props.updateIscrittiCorsi(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
-                                    { ...c, iscritti: c.iscritti - 1, dirty: true } :
-                                    c));
-                                props.setCreditiProvvisori(0);
-                                props.setPianoProvvisorio([]);
-                                props.updatePiano([], 0);
-                                navigate('/pianostudi');
-                            }}>Elimina piano</Button>
+                        {buttonElimina}
                         <span style={{ marginLeft: '10%' }}></span>
-                        <Button style={{ color: 'black' }} className='btn-sm' variant='secondary'
-                            onClick={() => {
-                                props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1
-                                        && props.pianoIniziale.filter(p => p === c.codice).length === 0 ?
-                                        { ...c, iscritti: c.iscritti - 1, dirty: false } :
-                                        props.pianoProvvisorio.filter(p => p === c.codice).length === 0
-                                            && props.pianoIniziale.filter(p => p === c.codice).length === 1 ?
-                                            { ...c, iscritti: c.iscritti + 1, dirty: false } :
-                                            c));
-                                props.setPianoProvvisorio(props.pianoIniziale);
-                                props.setCreditiProvvisori(props.creditiIniziali);
-                                navigate('/pianostudi');
-                            }}>Annulla modifiche</Button>
+                        {buttonAnnulla}
                     </div>
                 </>
             }

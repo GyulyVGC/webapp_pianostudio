@@ -12,7 +12,7 @@ function MyAlerts(props) {
     return (
         <Box sx={{ width: '100%', position: 'sticky', top: props.position }}>
             <Collapse in={open}>
-                <Alert severity={props.type}
+                <Alert sx={{height: '7vh'}} severity={props.type}
                     action={
                         <IconButton
                             aria-label="close"
@@ -25,9 +25,7 @@ function MyAlerts(props) {
                         >
                             <CloseIcon fontSize="inherit" />
                         </IconButton>
-                    }
-                    sx={{ mb: 2 }}
-                >
+                    }>
                     {props.message}
                 </Alert>
             </Collapse>

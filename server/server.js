@@ -8,7 +8,7 @@ const LocalStrategy = require('passport-local').Strategy; // username and passwo
 const session = require('express-session'); // enable sessions
 const userDao = require('./user-dao');
 
-const ritardo = 0; //millisecondi
+const ritardo = 1500; //millisecondi
 
 /*** Set up Passport ***/
 // set up the "username and password" login strategy
@@ -56,7 +56,7 @@ const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated())
     return next();
 
-  return res.status(401).json({ error: 'not authenticated' });
+  return res.status(401).json({ error: 'Utente non autenticato. Effettua il login per accedere al tuo piano.' });
 }
 
 // set up the session
@@ -85,7 +85,7 @@ app.get('/courses', (req, res) => { //anche per i non loggedIn
 // PUT /courses
 app.put('/courses', isLoggedIn, async (req, res) => {
   if (Array.isArray(req.body) === false) {
-    return res.status(422).json({ error: 'formato corsi errato' });
+    return res.status(422).json({ error: 'Formato corsi errato.' });
   }
 
   try {
@@ -128,7 +128,7 @@ app.get('/pianostudi', isLoggedIn, (req, res) => {
 // PUT /pianostudi
 app.put('/pianostudi', isLoggedIn, async (req, res) => {
   if (req.body.corsi !== null && Array.isArray(req.body.corsi) === false) {
-    return res.status(422).json({ error: 'formato corsi errato' });
+    return res.status(422).json({ error: 'Formato corsi errato.' });
   }
 
   try {
@@ -138,21 +138,6 @@ app.put('/pianostudi', isLoggedIn, async (req, res) => {
     res.status(500).json();
   }
 });
-/*
-// PUT /corsi/iscritti
-app.put('/corsi/iscritti', isLoggedIn, async (req, res) => {
-  if (req.body.corsi !== null && Array.isArray(req.body.corsi) === false) {
-    return res.status(422).json({ error: 'formato corsi errato' });
-  }
- 
-  try {
-    await dao.setPiano(req.body.corsi, req.user.id);
-    res.status(201).end();
-  } catch (err) {
-    res.status(500).json();
-  }
-});
-*/
 
 
 /*** Users APIs ***/
@@ -209,7 +194,7 @@ app.get('/sessions/current', (req, res) => {
     res.status(200).json(req.user);
   }
   else
-    res.status(401).json({ error: 'Unauthenticated user!' });;
+    res.status(401).json({ error: 'Utente non autenticato. Effettua il login per accedere al tuo piano.' });;
 });
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}/`));
