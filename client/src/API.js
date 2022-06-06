@@ -6,6 +6,7 @@ async function getCourses() {
   const coursesJson = await response.json();
   if (response.ok) {
     return coursesJson.map((c) => ({
+      id: c.id,
       codice: c.codice,
       nome: c.nome,
       crediti: c.crediti,

@@ -92,7 +92,7 @@ function App() {
 
   const updatePiano = (piano, crediti) => {
     setPiano(piano);
-    API.updatePiano(piano.map(c => '"'+c+'"'), crediti)
+    API.updatePiano(piano, crediti)
       .then(() => setLoadPiano(true))
       .catch(err => handleServerError(err));
   }

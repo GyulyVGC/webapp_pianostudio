@@ -62,7 +62,7 @@ function MyLoginForm(props) {
                 right: '1%',
                 left: '76%'
             }}>
-                <br /><br /><br /><br /><br />
+                <br /><br /><br /><br />
                 <h1 style={{ marginLeft: '33%' }}>Login</h1>
                 <br />
                 {props.errorMessage ?

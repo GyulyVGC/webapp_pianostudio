@@ -26,10 +26,10 @@ function MyPianoCourse(props) {
                     <h5><RiForbid2Line style={{ cursor: 'pointer' }}
                         onClick={() => {
                             let propedeuticita = '';
-                            for (let codiceInPiano of props.pianoProvvisorio) {
-                                let corsoInPiano = props.vett.filter(c => c.codice === codiceInPiano)[0];
-                                if (corsoInPiano.propedeutico === props.course.codice) {
-                                    propedeuticita = codiceInPiano;
+                            for (let idInPiano of props.pianoProvvisorio) {
+                                let corsoInPiano = props.vett.filter(c => c.id === idInPiano)[0];
+                                if (corsoInPiano.propedeutico === props.course.id) {
+                                    propedeuticita = props.vett.filter(c => c.id === idInPiano)[0].codice;;
                                 }
                             }
                             props.setErrorMessage(() => 'È propedeutico al corso ' + propedeuticita + '.');
@@ -38,11 +38,12 @@ function MyPianoCourse(props) {
                 <h5><FiMinus style={{ cursor: props.loadCorsi ? '' : 'pointer' }}
                     onClick={() => {
                         if (props.loadCorsi === false) {
-                            props.setVett(props.vett.map(c => c.codice === props.course.codice ?
+                            props.setVett(props.vett.map(c => c.id === props.course.id ?
                                 { ...c, iscritti: c.iscritti - 1, dirty: true } :
                                 c));
-                            props.setPianoProvvisorio(props.pianoProvvisorio.filter(c => c !== props.course.codice));
+                            props.setPianoProvvisorio(props.pianoProvvisorio.filter(c => c !== props.course.id));
                             props.setCreditiProvvisori(props.creditiProvvisori - props.course.crediti);
+                            props.setErrorMessage(() => '');
                         }
                     }} /></h5>}
         </td>
@@ -53,9 +54,9 @@ function MyPianoCourse(props) {
 
 function getPianoCourseStatus(courses, pianoProvvisorio, course) {
     //non posso toglierlo perché propedeutico per altri già inseriti
-    for (let codiceInPiano of pianoProvvisorio) {
-        let corsoInPiano = courses.filter(c => c.codice === codiceInPiano)[0];
-        if (corsoInPiano.propedeutico === course.codice) {
+    for (let idInPiano of pianoProvvisorio) {
+        let corsoInPiano = courses.filter(c => c.id === idInPiano)[0];
+        if (corsoInPiano.propedeutico === course.id) {
             return 'isPropedeutico';
         }
     }
@@ -66,10 +67,10 @@ function getPianoCourseStatus(courses, pianoProvvisorio, course) {
 
 function AddPianoRows(props) {
     let pianoTable = [];
-    for (let codice of props.pianoProvvisorio) {
-        let course = props.vett.filter(c => c.codice === codice)[0];
+    for (let id of props.pianoProvvisorio) {
+        let course = props.vett.filter(c => c.id === id)[0];
         let status = getPianoCourseStatus(props.vett, props.pianoProvvisorio, course);
-        pianoTable.push(<MyPianoCourse key={codice} status={status} loadCorsi={props.loadCorsi}
+        pianoTable.push(<MyPianoCourse key={id} status={status} loadCorsi={props.loadCorsi}
             course={course} setPianoProvvisorio={props.setPianoProvvisorio} vett={props.vett}
             pianoProvvisorio={props.pianoProvvisorio} setVett={props.setVett}
             setCreditiProvvisori={props.setCreditiProvvisori} creditiProvvisori={props.creditiProvvisori}
@@ -104,6 +105,7 @@ function MyModificaPiano(props) {
                 if (props.creditiProvvisori >= 20 && props.creditiProvvisori <= 40) {
                     props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
                     props.updateIscrittiCorsi(props.courses);
+                    setErrorMessage(() => '');
                     navigate('/pianostudi');
                 }
                 else {
@@ -114,6 +116,7 @@ function MyModificaPiano(props) {
                 if (props.creditiProvvisori >= 60 && props.creditiProvvisori <= 80) {
                     props.updatePiano(props.pianoProvvisorio, props.creditiProvvisori);
                     props.updateIscrittiCorsi(props.courses);
+                    setErrorMessage(() => '');
                     navigate('/pianostudi');
                 }
                 else {
@@ -125,30 +128,32 @@ function MyModificaPiano(props) {
     let buttonElimina = <Button className={props.loadCorsi ? 'btn-sm disabled' : 'btn-sm'} 
          variant='danger' style={{ color: 'black' }}
         onClick={() => {
-            props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
+            props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.id).length === 1 ?
                 { ...c, iscritti: c.iscritti - 1, dirty: true } :
                 c));
-            props.updateIscrittiCorsi(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
+            props.updateIscrittiCorsi(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.id).length === 1 ?
                 { ...c, iscritti: c.iscritti - 1, dirty: true } :
                 c));
             props.setCreditiProvvisori(0);
             props.setPianoProvvisorio([]);
             props.updatePiano([], 0);
+            setErrorMessage(() => '');
             navigate('/pianostudi');
         }}>Elimina piano</Button>;
 
     let buttonAnnulla = <Button className={props.loadCorsi ? 'btn-sm disabled' : 'btn-sm'}
         style={{ color: 'black' }} variant='secondary'
         onClick={() => {
-            props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1
-                && props.pianoIniziale.filter(p => p === c.codice).length === 0 ?
+            props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.id).length === 1
+                && props.pianoIniziale.filter(p => p === c.id).length === 0 ?
                 { ...c, iscritti: c.iscritti - 1, dirty: false } :
-                props.pianoProvvisorio.filter(p => p === c.codice).length === 0
-                    && props.pianoIniziale.filter(p => p === c.codice).length === 1 ?
+                props.pianoProvvisorio.filter(p => p === c.id).length === 0
+                    && props.pianoIniziale.filter(p => p === c.id).length === 1 ?
                     { ...c, iscritti: c.iscritti + 1, dirty: false } :
                     c));
             props.setPianoProvvisorio(props.pianoIniziale);
             props.setCreditiProvvisori(props.creditiIniziali);
+            setErrorMessage(() => '');
             navigate('/pianostudi');
         }}>Annulla modifiche</Button>;
 

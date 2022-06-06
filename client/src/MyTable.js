@@ -19,7 +19,9 @@ function MyCourse(props) {
     if (incompatibili !== null) {
         incompatibiliList =
             <ul>
-                {incompatibili.map(incomp => <li key={incomp}> {incomp} {'(' + props.vett.filter(c => c.codice === incomp)[0].nome + ')'}</li>)}
+                {incompatibili.map(incomp =>
+                    <li key={incomp}> {props.vett.filter(c => c.id === incomp)[0].codice}
+                        {' (' + props.vett.filter(c => c.id === incomp)[0].nome + ')'}</li>)}
             </ul>
     }
 
@@ -28,8 +30,8 @@ function MyCourse(props) {
     if (propedeutico !== null) {
         propedeuticoList =
             <ul>
-                {<li> {props.course.propedeutico + ' (' +
-                    props.vett.filter(c => c.codice === props.course.propedeutico)[0].nome + ')'} </li>}
+                {<li> {props.vett.filter(c => c.id === propedeutico)[0].codice + ' (' +
+                    props.vett.filter(c => c.id === propedeutico)[0].nome + ')'} </li>}
             </ul>
     }
 
@@ -40,11 +42,12 @@ function MyCourse(props) {
                 <h5><FiPlus style={{ cursor: props.loadCorsi ? '' : 'pointer' }}
                     onClick={() => {
                         if (props.loadCorsi === false) {
-                            props.setVett(props.vett.map(c => c.codice === props.course.codice ?
+                            props.setVett(props.vett.map(c => c.id === props.course.id ?
                                 { ...c, iscritti: c.iscritti + 1, dirty: true } :
                                 c));
-                            props.setPianoProvvisorio(props.pianoProvvisorio.concat(props.course.codice));
+                            props.setPianoProvvisorio(props.pianoProvvisorio.concat(props.course.id));
                             props.setCreditiProvvisori(props.creditiProvvisori + props.course.crediti);
+                            props.setErrorMessage(() => '');
                         }
                     }} /></h5>;
             break;
@@ -56,7 +59,9 @@ function MyCourse(props) {
                 <span title='Manca il corso propedeutico!'>
                     <h5><RiForbid2Line style={{ cursor: 'pointer' }}
                         onClick={() => {
-                            props.setErrorMessage(() => 'Devi prima inserire il corso propedeutico (' + props.course.propedeutico + ').');
+                            props.setErrorMessage(() => 'Devi prima inserire il corso propedeutico (' 
+                                + props.vett.filter(c => c.id === props.course.propedeutico)[0].codice
+                                + ').');
                         }} /></h5>
                 </span>
             break;
@@ -77,7 +82,7 @@ function MyCourse(props) {
                             let incompatibilita = '';
                             for (let incomp of incompatibili) {
                                 if (props.pianoProvvisorio.filter(pr => pr === incomp).length === 1) {
-                                    incompatibilita = incomp;
+                                    incompatibilita = props.vett.filter(c => c.id === incomp)[0].codice;
                                 }
                             }
                             props.setErrorMessage(() => 'Incompatibile con il corso ' + incompatibilita + ' già inserito.')
@@ -146,7 +151,7 @@ function MyCourse(props) {
 
 function getCourseStatus(pianoProvvisorio, course) {
     //già presente
-    if (pianoProvvisorio.filter(c => c === course.codice).length === 1) {
+    if (pianoProvvisorio.filter(c => c === course.id).length === 1) {
         return 'alreadyInserted';
     }
     //manca il corso propedeutico
@@ -163,17 +168,20 @@ function getCourseStatus(pianoProvvisorio, course) {
             }
         }
     }
-    else if (course.iscritti === course.maxstudenti) {
+    //massimo iscritti raggiunto
+    else if (course.iscritti == course.maxstudenti) {
         return 'noPosti';
     }
-    return 'ok';
+    
+        return 'ok';
+    
 }
 
 function AddRows(props) {
     let courseTable = [];
     for (let course of props.vett) {
         let status = getCourseStatus(props.pianoProvvisorio, course);
-        courseTable.push(<MyCourse editPage={props.editPage} key={course.codice}
+        courseTable.push(<MyCourse editPage={props.editPage} key={course.id}
             vett={props.vett} setVett={props.setVett} loadCorsi={props.loadCorsi}
             course={course} pianoProvvisorio={props.pianoProvvisorio}
             creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}

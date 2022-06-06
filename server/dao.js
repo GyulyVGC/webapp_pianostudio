@@ -1,5 +1,4 @@
 'use strict';
-const dayjs = require('dayjs');
 /* Data Access Object (DAO) module for accessing courses and exams */
 
 const sqlite = require('sqlite3');
@@ -19,6 +18,7 @@ exports.listCourses = () => {
                 return;
             }
             const courses = rows.map((c) => ({
+                id: c.ID,
                 codice: c.CODICE,
                 nome: c.NOME,
                 crediti: c.CREDITI,
@@ -46,42 +46,6 @@ exports.setIscrittiCourse = (corsoModificato) => {
     });
 };
 
-// get corse by codice
-exports.getCourseByCodice = (codice) => {
-    return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM CORSO WHERE CODICE = ?';
-        db.all(sql, [id], (err, rows) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-            const corso = rows.map((f) => ({
-                codice: c.CODICE,
-                nome: c.NOME,
-                crediti: c.CREDITI,
-                maxstudenti: c.MAXSTUDENTI,
-                iscritti: c.ISCRITTI,
-                incompatibili: JSON.parse(c.INCOMPATIBILI),
-                propedeutico: c.PROPEDEUTICO
-            }))[0];
-            resolve(corso);
-        });
-    });
-};
-
-exports.insertFilm = (title, favorite, watchdate, rating, userID) => {
-    return new Promise((resolve, reject) => {
-        const sql = 'INSERT INTO films(title, favorite, watchdate, rating, user) VALUES(?,?,?,?,?)';
-        db.run(sql, [title, favorite, watchdate, rating, userID], function (err) {
-            if (err) {
-                reject(err);
-                return;
-            }
-            resolve(this.lastID);
-        });
-    });
-};
-
 // tutti i corsi del piano dello user loggato
 exports.listPiano = (userID) => {
     return new Promise((resolve, reject) => {
@@ -99,7 +63,6 @@ exports.listPiano = (userID) => {
         });
     });
 };
-
 
 // update piano di studi
 exports.setPiano = (corsi, crediti, userID) => {

@@ -26,9 +26,9 @@ function MyPianoCourse(props) {
 
 function AddPianoRows(props) {
     let pianoTable = [];
-    for (let codice of props.piano) {
-        let course = props.vett.filter(c => c.codice === codice)[0];
-        pianoTable.push(<MyPianoCourse key={codice} course={course} />);
+    for (let id of props.piano) {
+        let course = props.vett.filter(c => c.id === id)[0];
+        pianoTable.push(<MyPianoCourse key={id} course={course} />);
     }
     return pianoTable;
 }
