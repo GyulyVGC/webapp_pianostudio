@@ -74,7 +74,9 @@ function MyPianoStudi(props) {
                                     Il tuo piano di studi è vuoto.
                                     <br /><br />
                                     <span style={{ marginLeft: '27%' }} />
-                                    <Button style={stylish} onClick={() => {
+                                    <Button className={props.loadCorsi || props.LoadPiano ? 'btn-sm disabled' : 'btn-sm'}
+                                        style={stylish} 
+                                        onClick={() => {
                                         props.setLoadCorsi();
                                         navigate('/pianostudi/modifica');
                                     }} >Aggiungi corsi</Button>
@@ -103,7 +105,8 @@ function MyPianoStudi(props) {
                                 position: 'sticky', bottom: '5%', top: '47%'
                             }}>
                                 <span style={{ marginLeft: '35%' }}></span>
-                                <Button style={stylish} className='btn-sm' variant='secondary'
+                                <Button className={props.loadCorsi || props.LoadPiano ? 'btn-sm disabled' : 'btn-sm'}
+                                    style={stylish} variant='secondary'
                                     onClick={() => {
                                         props.setLoadCorsi();
                                         navigate('/pianostudi/modifica');

@@ -35,13 +35,15 @@ function MyPianoCourse(props) {
                             props.setErrorMessage(() => 'È propedeutico al corso ' + propedeuticita + '.');
                         }} /></h5>
                 </span> :
-                <h5><FiMinus style={{ cursor: 'pointer' }}
+                <h5><FiMinus style={{ cursor: props.loadCorsi ? '' : 'pointer' }}
                     onClick={() => {
-                        props.setVett(props.vett.map(c => c.codice === props.course.codice ?
-                            { ...c, iscritti: c.iscritti - 1, dirty: true } :
-                            c));
-                        props.setPianoProvvisorio(props.pianoProvvisorio.filter(c => c !== props.course.codice));
-                        props.setCreditiProvvisori(props.creditiProvvisori - props.course.crediti);
+                        if (props.loadCorsi === false) {
+                            props.setVett(props.vett.map(c => c.codice === props.course.codice ?
+                                { ...c, iscritti: c.iscritti - 1, dirty: true } :
+                                c));
+                            props.setPianoProvvisorio(props.pianoProvvisorio.filter(c => c !== props.course.codice));
+                            props.setCreditiProvvisori(props.creditiProvvisori - props.course.crediti);
+                        }
                     }} /></h5>}
         </td>
     </tr>);
@@ -67,7 +69,7 @@ function AddPianoRows(props) {
     for (let codice of props.pianoProvvisorio) {
         let course = props.vett.filter(c => c.codice === codice)[0];
         let status = getPianoCourseStatus(props.vett, props.pianoProvvisorio, course);
-        pianoTable.push(<MyPianoCourse key={codice} status={status}
+        pianoTable.push(<MyPianoCourse key={codice} status={status} loadCorsi={props.loadCorsi}
             course={course} setPianoProvvisorio={props.setPianoProvvisorio} vett={props.vett}
             pianoProvvisorio={props.pianoProvvisorio} setVett={props.setVett}
             setCreditiProvvisori={props.setCreditiProvvisori} creditiProvvisori={props.creditiProvvisori}
@@ -95,7 +97,8 @@ function MyModificaPiano(props) {
             borderWidth: '2px'
         };
 
-    let buttonSalva = <Button className='btn-sm' style={stylish}
+    let buttonSalva = <Button className={props.loadCorsi ? 'btn-sm disabled' : 'btn-sm'} 
+        style={stylish}
         onClick={() => {
             if (props.user.iscrizione === 'part-time') {
                 if (props.creditiProvvisori >= 20 && props.creditiProvvisori <= 40) {
@@ -119,7 +122,8 @@ function MyModificaPiano(props) {
             }
         }}>Salva</Button>;
 
-    let buttonElimina = <Button style={{ color: 'black' }} className='btn-sm' variant='danger'
+    let buttonElimina = <Button className={props.loadCorsi ? 'btn-sm disabled' : 'btn-sm'} 
+         variant='danger' style={{ color: 'black' }}
         onClick={() => {
             props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1 ?
                 { ...c, iscritti: c.iscritti - 1, dirty: true } :
@@ -133,7 +137,8 @@ function MyModificaPiano(props) {
             navigate('/pianostudi');
         }}>Elimina piano</Button>;
 
-    let buttonAnnulla = <Button style={{ color: 'black' }} className='btn-sm' variant='secondary'
+    let buttonAnnulla = <Button className={props.loadCorsi ? 'btn-sm disabled' : 'btn-sm'}
+        style={{ color: 'black' }} variant='secondary'
         onClick={() => {
             props.setCourses(props.courses.map(c => props.pianoProvvisorio.filter(p => p === c.codice).length === 1
                 && props.pianoIniziale.filter(p => p === c.codice).length === 0 ?
@@ -195,7 +200,7 @@ function MyModificaPiano(props) {
                                 <th style={{ textAlign: 'center' }}>Crediti</th>
                                 <th style={{ textAlign: 'center' }}>Rimuovi</th>
                             </tr>
-                            <AddPianoRows pianoProvvisorio={props.pianoProvvisorio}
+                            <AddPianoRows pianoProvvisorio={props.pianoProvvisorio} loadCorsi={props.loadCorsi}
                                 creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
                                 vett={props.courses} setVett={props.setCourses} setPianoProvvisorio={props.setPianoProvvisorio}
                                 errorMessage={errorMessage} setErrorMessage={setErrorMessage} />

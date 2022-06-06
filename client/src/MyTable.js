@@ -37,13 +37,15 @@ function MyCourse(props) {
     switch (props.status) {
         case 'ok':
             statusComponent =
-                <h5><FiPlus style={{ cursor: 'pointer' }}
+                <h5><FiPlus style={{ cursor: props.loadCorsi ? '' : 'pointer' }}
                     onClick={() => {
-                        props.setVett(props.vett.map(c => c.codice === props.course.codice ?
+                        if (props.loadCorsi === false) {
+                            props.setVett(props.vett.map(c => c.codice === props.course.codice ?
                                 { ...c, iscritti: c.iscritti + 1, dirty: true } :
                                 c));
-                        props.setPianoProvvisorio(props.pianoProvvisorio.concat(props.course.codice));
-                        props.setCreditiProvvisori(props.creditiProvvisori + props.course.crediti);
+                            props.setPianoProvvisorio(props.pianoProvvisorio.concat(props.course.codice));
+                            props.setCreditiProvvisori(props.creditiProvvisori + props.course.crediti);
+                        }
                     }} /></h5>;
             break;
         case 'alreadyInserted':
@@ -172,7 +174,7 @@ function AddRows(props) {
     for (let course of props.vett) {
         let status = getCourseStatus(props.pianoProvvisorio, course);
         courseTable.push(<MyCourse editPage={props.editPage} key={course.codice}
-            vett={props.vett} setVett={props.setVett}
+            vett={props.vett} setVett={props.setVett} loadCorsi={props.loadCorsi}
             course={course} pianoProvvisorio={props.pianoProvvisorio}
             creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
             setPianoProvvisorio={props.setPianoProvvisorio} status={status}
@@ -195,9 +197,9 @@ function MyTable(props) {
             <MyAlerts type='info' message={errorMessage} position='11%'
                 setMessage={setErrorMessage}></MyAlerts> :
             props.serverError ?
-            <MyAlerts type='error' message={props.serverError} position='11%'
-            setMessage={props.setServerError}></MyAlerts> :
-            false}
+                <MyAlerts type='error' message={props.serverError} position='11%'
+                    setMessage={props.setServerError}></MyAlerts> :
+                false}
         <br />
         {props.loadCorsiInit ?
             <><h2>Ricevo i corsi dal server...</h2></> :
@@ -222,7 +224,7 @@ function MyTable(props) {
                         <AddRows editPage={editPage} vett={props.courses} setVett={props.setCourses}
                             pianoProvvisorio={props.pianoProvvisorio} setPianoProvvisorio={props.setPianoProvvisorio}
                             creditiProvvisori={props.creditiProvvisori} setCreditiProvvisori={props.setCreditiProvvisori}
-                            errorMessage={errorMessage} setErrorMessage={setErrorMessage} />
+                            errorMessage={errorMessage} setErrorMessage={setErrorMessage} loadCorsi={props.loadCorsi} />
                     </tbody>
                 </Table>
             </>

@@ -182,7 +182,7 @@ function App() {
         pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={updatePianoProvvisorio}
         courses={courses} setCourses={updateCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={updateCreditiProvvisori}/>
-      <MyPianoStudi user={user} piano={piano} courses={courses} 
+      <MyPianoStudi user={user} piano={piano} courses={courses} loadCorsi={loadCorsi} 
         loadPiano={loadPiano} loadPianoInit={loadPianoInit} setLoadCorsi={updateLoadCorsi}/>
     </>
 
@@ -195,7 +195,7 @@ function App() {
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={updateCreditiProvvisori}/>
       <MyModificaPiano pianoIniziale={piano} pianoProvvisorio={pianoProvvisorio} setPianoProvvisorio={updatePianoProvvisorio}
         creditiIniziali={crediti} creditiProvvisori={creditiProvvisori} setCreditiProvvisori={updateCreditiProvvisori}
-        updateIscrittiCorsi={updateIscrittiCorsi}
+        updateIscrittiCorsi={updateIscrittiCorsi} loadCorsi={loadCorsi}
         courses={courses} setCourses={updateCourses} updatePiano={updatePiano} user={user}/>
     </>
 
