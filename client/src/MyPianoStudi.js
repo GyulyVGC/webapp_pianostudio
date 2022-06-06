@@ -75,6 +75,7 @@ function MyPianoStudi(props) {
                                     <br /><br />
                                     <span style={{ marginLeft: '27%' }} />
                                     <Button style={stylish} onClick={() => {
+                                        props.setLoadCorsi();
                                         navigate('/pianostudi/modifica');
                                     }} >Aggiungi corsi</Button>
                                 </h5>
@@ -104,6 +105,7 @@ function MyPianoStudi(props) {
                                 <span style={{ marginLeft: '35%' }}></span>
                                 <Button style={stylish} className='btn-sm' variant='secondary'
                                     onClick={() => {
+                                        props.setLoadCorsi();
                                         navigate('/pianostudi/modifica');
                                     }}>Modifica piano</Button>
                             </div>

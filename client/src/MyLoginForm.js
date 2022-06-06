@@ -24,15 +24,15 @@ function MyLoginForm(props) {
 
         if (username.trim().length === 0) {
             valid = false;
-            props.setErrorMessage(() => "Devi specificare la tua email!");
+            props.setErrorMessage(() => "Devi inserire l'email!");
         }
-        else if (password.length < 6) {
+        else if (password.length === 0) {
             valid = false;
-            props.setErrorMessage(() => 'La password deve essere lunga almeno 6 caratteri!');
+            props.setErrorMessage(() => 'Devi inserire la password!');
         }
         else if (!validEmail) {
             valid = false;
-            props.setErrorMessage(() => 'Formato email errato (deve essere nella forma "a@b.c")');
+            props.setErrorMessage(() => 'Formato email errato (deve essere nella forma "x@y.z")');
         }
 
         if (valid) {

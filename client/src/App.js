@@ -52,6 +52,10 @@ function App() {
     setCreditiProvvisori(crediti);
   }
 
+  const updateLoadCorsi = () => {
+    setLoadCorsi(true);
+  }
+
   function handleServerError(errObj) {
     setServerError(errObj.error);
   }
@@ -130,6 +134,7 @@ function App() {
         setServerError('');
         setLoadPianoInit(false);
         setLoadPianoInit(true);
+        setLoadCorsi(true);
         user.iscrizione === null ?
           navigate('/iscrizione') :
           navigate('/pianostudi');
@@ -146,6 +151,7 @@ function App() {
     setUser({});
     setPiano([]);
     setMessageLogin('');
+    setLoadCorsi(true);
     navigate('/login');
   }
 
@@ -177,7 +183,7 @@ function App() {
         courses={courses} setCourses={updateCourses} updateIscrittiCorsi={updateIscrittiCorsi}
         creditiProvvisori={creditiProvvisori} setCreditiProvvisori={updateCreditiProvvisori}/>
       <MyPianoStudi user={user} piano={piano} courses={courses} 
-        loadPiano={loadPiano} loadPianoInit={loadPianoInit}/>
+        loadPiano={loadPiano} loadPianoInit={loadPianoInit} setLoadCorsi={updateLoadCorsi}/>
     </>
 
   const editPage =
