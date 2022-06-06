@@ -78,16 +78,15 @@ exports.setPiano = (corsi, crediti, userID) => {
     });
 };
 
-// delete an existing film
-exports.deleteFilm = (id, userID) => {
+exports.updateIscrizione = (tipoIscrizione, id) => {
     return new Promise((resolve, reject) => {
-        const sql = 'DELETE FROM films WHERE id = ? AND user=?';
-        db.run(sql, [id, userID], (err) => {
+        const sql = 'UPDATE USER SET iscrizione=? WHERE id = ?';
+        db.run(sql, [tipoIscrizione, id], function (err) {
             if (err) {
                 reject(err);
                 return;
-            } else
-                resolve(null);
+            }
+            resolve(this.lastID);
         });
     });
 }

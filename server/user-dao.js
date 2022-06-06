@@ -59,16 +59,3 @@ exports.getUser = (email, password) => {
       });
     });
   };
-
-  exports.updateIscrizione = (tipoIscrizione, id) => {
-    return new Promise((resolve, reject) => {
-      const sql = 'UPDATE USER SET iscrizione=? WHERE id = ?';
-      db.run(sql, [tipoIscrizione, id], function (err) {
-          if (err) {
-              reject(err);
-              return;
-          }
-          resolve(this.lastID);
-      });
-  });
-  }

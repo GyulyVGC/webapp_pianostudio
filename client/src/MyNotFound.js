@@ -1,8 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button } from 'react-bootstrap';
-import nightModeContext from './nightModeContext';
+
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
+import { Button } from 'react-bootstrap';
+
+import nightModeContext from './nightModeContext';
 
 function MyNotFound() {
     const navigate = useNavigate();

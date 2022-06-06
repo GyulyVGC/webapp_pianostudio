@@ -1,8 +1,10 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Button, Col } from 'react-bootstrap';
 import { useContext } from 'react';
-import nightModeContext from './nightModeContext';
 import { useNavigate } from 'react-router-dom';
+
+import nightModeContext from './nightModeContext';
 
 function MyIscrizione(props) {
     const nightMode = useContext(nightModeContext).nightMode;

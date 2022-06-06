@@ -1,63 +1,61 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Row } from 'react-bootstrap';
 import './App.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { Row } from 'react-bootstrap';
 import React, { useEffect, useState } from 'react';
-import MyNavbar from './MyNavbar.js';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
+
+import API from './API';
 import MyTable from './MyTable.js';
 import MyFooter from './MyFooter.js';
+import MyNavbar from './MyNavbar.js';
 import MyNotFound from './MyNotFound';
+import MyLoginForm from './MyLoginForm';
 import MyIscrizione from './MyIscrizione';
 import MyPianoStudi from './MyPianoStudi';
 import MyModificaPiano from './MyModificaPiano';
 import nightModeContext from './nightModeContext';
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom'
-
-import API from './API';
-import MyLoginForm from './MyLoginForm';
 
 function App() {
 
-  let [courses, setCourses] = useState([]);
-  let [piano, setPiano] = useState([]);
-  let [pianoProvvisorio, setPianoProvvisorio] = useState([]); 
-  const [nightMode, setNightMode] = useState(true);
-  let updateNightMode = () => setNightMode(nightMode => !nightMode);
-  let nightModeObject = { nightMode: nightMode, updateNightMode: updateNightMode };
-
-  const [loadCorsiInit, setLoadCorsiInit] = useState(true);
-  const [loadPianoInit, setLoadPianoInit] = useState(true);
+  const [courses, setCourses] = useState([]);
   const [loadCorsi, setLoadCorsi] = useState(false);
+  const [loadCorsiInit, setLoadCorsiInit] = useState(true);
+
+  const [piano, setPiano] = useState([]);
   const [loadPiano, setLoadPiano] = useState(false);
+  const [loadPianoInit, setLoadPianoInit] = useState(true);
+  const [pianoProvvisorio, setPianoProvvisorio] = useState([]); 
+
+  const [crediti, setCrediti] = useState(0);
+  const [creditiProvvisori, setCreditiProvvisori] = useState(0);
+
+  const [nightMode, setNightMode] = useState(true);
+  const updateNightMode = () => setNightMode(nightMode => !nightMode);
+  const nightModeObject = { nightMode: nightMode, updateNightMode: updateNightMode };
+
+  const [user, setUser] = useState({});
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  const [serverError, setServerError] = useState('');
+  const [messageLogin, setMessageLogin] = useState('');
 
   const navigate = useNavigate();
 
-  const [loggedIn, setLoggedIn] = useState(false);  // no user is logged in when app loads
-  const [user, setUser] = useState({});
-
-  const [messageLogin, setMessageLogin] = useState('');
-  const [serverError, setServerError] = useState('');
-
-  let [crediti, setCrediti] = useState(0);
-  let [creditiProvvisori, setCreditiProvvisori] = useState(0);
-
-  const updatePianoProvvisorio = (pianoProvvisorio) => {
-    setPianoProvvisorio(pianoProvvisorio);
-  }
-
   const updateCourses = (courses) => {
     setCourses(courses);
-  }
-
-  const updateCreditiProvvisori = (crediti) => {
-    setCreditiProvvisori(crediti);
   }
 
   const updateLoadCorsi = () => {
     setLoadCorsi(true);
   }
 
-  function handleServerError(errObj) {
-    setServerError(errObj.error);
+  const updatePianoProvvisorio = (pianoProvvisorio) => {
+    setPianoProvvisorio(pianoProvvisorio);
+  }
+
+  const updateCreditiProvvisori = (crediti) => {
+    setCreditiProvvisori(crediti);
   }
 
   const updateIscrizione = (tipoIscrizione) => {
@@ -68,6 +66,10 @@ function App() {
     API.storeUpdatedIscrizione({ ...user, iscrizione: tipoIscrizione })
       .then()
       .catch(err => handleServerError(err));
+  }
+
+  function handleServerError(errObj) {
+    setServerError(errObj.error);
   }
 
   const updateIscrittiCorsi = (corsi) => {
@@ -132,7 +134,7 @@ function App() {
         setUser(user);
         setMessageLogin('');
         setServerError('');
-        setLoadPianoInit(false);
+        //setLoadPianoInit(false);
         setLoadPianoInit(true);
         setLoadCorsi(true);
         user.iscrizione === null ?

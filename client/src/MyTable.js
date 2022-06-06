@@ -1,13 +1,15 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Col, Table } from 'react-bootstrap';
 import { GiExpand, GiContract } from 'react-icons/gi';
 import { FiPlus } from 'react-icons/fi';
 import { RiForbid2Line } from 'react-icons/ri';
 import { BsClockHistory } from 'react-icons/bs';
 import { useContext, useState } from 'react';
-import nightModeContext from './nightModeContext';
 import { useLocation } from 'react-router-dom';
+
 import MyAlerts from './MyAlerts';
+import nightModeContext from './nightModeContext';
 
 function MyCourse(props) {
 
@@ -149,6 +151,8 @@ function MyCourse(props) {
     return (retVal);
 }
 
+
+
 function getCourseStatus(pianoProvvisorio, course) {
     //già presente
     if (pianoProvvisorio.filter(c => c === course.id).length === 1) {
@@ -169,11 +173,13 @@ function getCourseStatus(pianoProvvisorio, course) {
         }
     }
     //massimo iscritti raggiunto
-    if (course.iscritti == course.maxstudenti) {
+    if (course.iscritti === course.maxstudenti) {
         return 'noPosti';
     }
     return 'ok';
 }
+
+
 
 function AddRows(props) {
     let courseTable = [];
@@ -188,6 +194,8 @@ function AddRows(props) {
     }
     return courseTable;
 }
+
+
 
 function MyTable(props) {
     const nightMode = useContext(nightModeContext).nightMode;

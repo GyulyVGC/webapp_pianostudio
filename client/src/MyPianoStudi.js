@@ -1,9 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Button, Col, Table } from 'react-bootstrap';
 import { useContext } from 'react';
-import nightModeContext from './nightModeContext';
 import { useNavigate } from 'react-router-dom';
 import { BsClockHistory } from 'react-icons/bs';
+
+import nightModeContext from './nightModeContext';
 
 function MyPianoCourse(props) {
 
@@ -24,6 +26,7 @@ function MyPianoCourse(props) {
 }
 
 
+
 function AddPianoRows(props) {
     let pianoTable = [];
     for (let id of props.piano) {
@@ -32,6 +35,8 @@ function AddPianoRows(props) {
     }
     return pianoTable;
 }
+
+
 
 function MyPianoStudi(props) {
     const nightMode = useContext(nightModeContext).nightMode;

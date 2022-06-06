@@ -1,14 +1,18 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
-import { ImBooks } from 'react-icons/im';
-import { FaUserCheck, FaUserSlash } from 'react-icons/fa';
-import { BsSun, BsSunFill, BsMoonStarsFill, BsMoonStars } from 'react-icons/bs';
-import { useContext } from 'react';
-import nightModeContext from './nightModeContext';
-import { useNavigate } from 'react-router-dom';
+
 import Switch from '@mui/material/Switch';
 
+import { useContext } from 'react';
+import { ImBooks } from 'react-icons/im';
+import { useNavigate } from 'react-router-dom';
+import { FaUserCheck, FaUserSlash } from 'react-icons/fa';
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import { BsSun, BsSunFill, BsMoonStarsFill, BsMoonStars } from 'react-icons/bs';
+
+import nightModeContext from './nightModeContext';
+
 function MyNavbar(props) {
+    
     const nightMode = useContext(nightModeContext).nightMode;
     const updateNightMode = useContext(nightModeContext).updateNightMode;
     const navigate = useNavigate();

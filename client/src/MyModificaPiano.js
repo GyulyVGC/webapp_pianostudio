@@ -1,11 +1,13 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Button, Col, Table } from 'react-bootstrap';
 import { useContext, useState } from 'react';
-import nightModeContext from './nightModeContext';
 import { useNavigate } from 'react-router-dom';
 import { FiMinus } from 'react-icons/fi';
 import { RiForbid2Line } from 'react-icons/ri';
+
 import MyAlerts from './MyAlerts';
+import nightModeContext from './nightModeContext';
 
 function MyPianoCourse(props) {
 
@@ -52,6 +54,8 @@ function MyPianoCourse(props) {
     return (retVal);
 }
 
+
+
 function getPianoCourseStatus(courses, pianoProvvisorio, course) {
     //non posso toglierlo perché propedeutico per altri già inseriti
     for (let idInPiano of pianoProvvisorio) {
@@ -78,6 +82,8 @@ function AddPianoRows(props) {
     }
     return pianoTable;
 }
+
+
 
 function MyModificaPiano(props) {
     const nightMode = useContext(nightModeContext).nightMode;

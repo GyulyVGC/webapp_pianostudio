@@ -2,7 +2,7 @@ const URL = 'http://localhost:3001'
 
 async function getCourses() {
   // call: GET /courses
-  const response = await fetch(URL + '/courses', { credentials: 'include' }); //togliere????
+  const response = await fetch(URL + '/courses', { credentials: 'include' });
   const coursesJson = await response.json();
   if (response.ok) {
     return coursesJson.map((c) => ({
@@ -56,7 +56,6 @@ async function getPiano() {
   }
 }
 
-
 function updatePiano(corsi, crediti) {
   // call: PUT /pianostudi
   return new Promise((resolve, reject) => {
@@ -81,9 +80,9 @@ function updatePiano(corsi, crediti) {
 }
 
 function storeUpdatedIscrizione(user) {
-  // call: PUT /sessions/current
+  // call: PUT /iscrizione
   return new Promise((resolve, reject) => {
-    fetch(URL + '/sessions/current', {
+    fetch(URL + '/iscrizione', {
       method: 'PUT',
       credentials: 'include',
       headers: {
@@ -104,9 +103,6 @@ function storeUpdatedIscrizione(user) {
 }
 
 
-
-
-
 async function logIn(credentials) {
   let response = await fetch(URL + '/sessions', {
     method: 'POST',
@@ -125,10 +121,6 @@ async function logIn(credentials) {
   }
 }
 
-async function logOut() {
-  await fetch(URL + '/sessions/current', { method: 'DELETE', credentials: 'include' });
-}
-
 async function getUserInfo() {
   const response = await fetch(URL + '/sessions/current', { credentials: 'include' });
   const userInfo = await response.json();
@@ -139,6 +131,9 @@ async function getUserInfo() {
   }
 }
 
+async function logOut() {
+  await fetch(URL + '/sessions/current', { method: 'DELETE', credentials: 'include' });
+}
 
 const API = { getCourses, updateIscrittiCourses, storeUpdatedIscrizione, updatePiano, getPiano, logIn, logOut, getUserInfo };
 export default API;

@@ -92,7 +92,6 @@ app.put('/courses', isLoggedIn, async (req, res) => {
   if (Array.isArray(req.body) === false) {
     return res.status(422).json({ error: 'Formato corsi errato.' });
   }
-
   try {
     for(let course of req.body){
       console.log(course)
@@ -103,23 +102,6 @@ app.put('/courses', isLoggedIn, async (req, res) => {
     res.status(500).json();
   }
 });
-
-// GET /courses/:codice
-app.get('/courses/:codice',
-  async (req, res) => {
-    if (isNaN(req.params.codice)) {
-      return res.status(422).json();
-    }
-    try {
-      const corso = await dao.getCourseByCodice(req.params.codice);
-      if (Object.entries(corso).length === 0)
-        res.status(404).json(corso);
-      else
-        res.json(corso);
-    } catch (err) {
-      res.status(500).end();
-    }
-  });
 
 // GET /pianostudi
 app.get('/pianostudi', isLoggedIn, (req, res) => {
@@ -135,10 +117,24 @@ app.put('/pianostudi', isLoggedIn, async (req, res) => {
   if (req.body.corsi !== null && Array.isArray(req.body.corsi) === false) {
     return res.status(422).json({ error: 'Formato corsi errato.' });
   }
-
   try {
     await dao.setPiano(req.body.corsi, req.body.crediti, req.user.id);
     res.status(201).end();
+  } catch (err) {
+    res.status(500).json();
+  }
+});
+
+// PUT /iscrizione
+app.put('/iscrizione', isLoggedIn, async (req, res) => {
+  if (req.body.iscrizione !== null
+    && req.body.iscrizione !== 'part-time'
+    && req.body.iscrizione !== 'full-time') {
+    return res.status(422).json();
+  }
+  try {
+    await dao.updateIscrizione(req.body.iscrizione, req.user.id);
+    res.status(200).end();
   } catch (err) {
     res.status(500).json();
   }
@@ -169,29 +165,6 @@ app.post('/sessions', function (req, res, next) {
   })(req, res, next);
 });
 
-// PUT /sessions/current
-app.put('/sessions/current', isLoggedIn, async (req, res) => {
-  if (req.body.iscrizione !== null
-    && req.body.iscrizione !== 'part-time'
-    && req.body.iscrizione !== 'full-time') {
-    return res.status(422).json();
-  }
-
-  try {
-    await userDao.updateIscrizione(req.body.iscrizione, req.user.id);
-    res.status(200).end();
-  } catch (err) {
-    res.status(500).json();
-  }
-});
-
-
-// DELETE /sessions/current 
-// logout
-app.delete('/sessions/current', (req, res) => {
-  req.logout(() => { res.end(); });
-});
-
 // GET /sessions/current
 // check whether the user is logged in or not
 app.get('/sessions/current', (req, res) => {
@@ -200,6 +173,12 @@ app.get('/sessions/current', (req, res) => {
   }
   else
     res.status(401).json({ error: 'Utente non autenticato. Effettua il login per accedere al tuo piano.' });;
+});
+
+// DELETE /sessions/current 
+// logout
+app.delete('/sessions/current', (req, res) => {
+  req.logout(() => { res.end(); });
 });
 
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}/`));

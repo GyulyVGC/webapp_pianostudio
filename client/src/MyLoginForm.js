@@ -1,9 +1,11 @@
 import { Form, Button, Col } from 'react-bootstrap';
 import { useState, useContext } from 'react';
-import nightModeContext from './nightModeContext';
-import MyAlerts from './MyAlerts';
+
 import Checkbox from '@mui/material/Checkbox';
 import { FormControlLabel } from '@mui/material';
+
+import nightModeContext from './nightModeContext';
+import MyAlerts from './MyAlerts';
 
 function MyLoginForm(props) {
     const [username, setUsername] = useState('io@io.it');
