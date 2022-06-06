@@ -1,3 +1,10 @@
+// *****************************************************************
+// per simulare ritardo server durante caricamenti iniziali        *
+// e durante sincronizzazioni a seguito di azioni dell'utente      *
+const ritardo = 1500; //valore in millisecondi                     *
+// se giudicato fastidioso, può essere settato a zero              *
+// *****************************************************************
+
 const express = require('express');
 const morgan = require('morgan'); // logging middleware
 const dao = require('./dao'); // module for accessing the DB
@@ -7,8 +14,6 @@ const passport = require('passport'); // auth middleware
 const LocalStrategy = require('passport-local').Strategy; // username and password for login
 const session = require('express-session'); // enable sessions
 const userDao = require('./user-dao');
-
-const ritardo = 1500; //millisecondi
 
 /*** Set up Passport ***/
 // set up the "username and password" login strategy

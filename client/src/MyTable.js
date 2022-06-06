@@ -59,7 +59,7 @@ function MyCourse(props) {
                 <span title='Manca il corso propedeutico!'>
                     <h5><RiForbid2Line style={{ cursor: 'pointer' }}
                         onClick={() => {
-                            props.setErrorMessage(() => 'Devi prima inserire il corso propedeutico (' 
+                            props.setErrorMessage(() => 'Devi prima inserire il corso propedeutico ('
                                 + props.vett.filter(c => c.id === props.course.propedeutico)[0].codice
                                 + ').');
                         }} /></h5>
@@ -154,27 +154,25 @@ function getCourseStatus(pianoProvvisorio, course) {
     if (pianoProvvisorio.filter(c => c === course.id).length === 1) {
         return 'alreadyInserted';
     }
-    //manca il corso propedeutico
-    else if (course.propedeutico !== null) {
-        if (pianoProvvisorio.filter(c => c === course.propedeutico).length === 0) {
-            return 'needPropedeutico';
-        }
-    }
     //incompatibile con uno già presente
-    else if (course.incompatibili !== null) {
+    if (course.incompatibili !== null) {
         for (let incomp of course.incompatibili) {
             if (pianoProvvisorio.filter(c => c === incomp).length !== 0) {
                 return 'incompatibile';
             }
         }
     }
+    //manca il corso propedeutico
+    if (course.propedeutico !== null) {
+        if (pianoProvvisorio.filter(c => c === course.propedeutico).length === 0) {
+            return 'needPropedeutico';
+        }
+    }
     //massimo iscritti raggiunto
-    else if (course.iscritti == course.maxstudenti) {
+    if (course.iscritti == course.maxstudenti) {
         return 'noPosti';
     }
-    
-        return 'ok';
-    
+    return 'ok';
 }
 
 function AddRows(props) {
