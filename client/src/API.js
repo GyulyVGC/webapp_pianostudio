@@ -1,4 +1,4 @@
-const URL = 'http://localhost:3001'
+const URL = 'http://172.24.63.109:3001'
 
 async function getCourses() {
   // call: GET /corsi
