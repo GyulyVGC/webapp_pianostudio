@@ -1,7 +1,7 @@
 // ******************************************************************
 // per simulare ritardo server durante caricamenti iniziali        **
 // e durante sincronizzazioni a seguito di azioni dell'utente      **
-const ritardo = 200; //valore in millisecondi                     **
+const ritardo = 0; //valore in millisecondi                        **
 // se giudicato fastidioso, può essere settato a zero              **
 // ******************************************************************
 
