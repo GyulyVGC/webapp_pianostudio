@@ -52,7 +52,7 @@ app = new express();
 app.use(morgan('dev'));
 app.use(express.json());
 const corsOptions = {
-  origin: 'http://10.0.0.1:3000',
+  origin: 'http://10.0.0.144:3000',
   credentials: true,
 };
 app.use(cors(corsOptions));
